@@ -1,0 +1,2360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<title>MIND 2027 — Machine Intelligence, Narratives & Digital Humanities</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;700&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet"/>
+<script type="importmap">{"imports":{"lenis":"https://cdn.jsdelivr.net/npm/lenis@1.1.18/+esm"}}</script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+img{display:block;max-width:100%}
+button{cursor:pointer;border:none;background:none;font:inherit}
+a{text-decoration:none;color:inherit}
+:focus-visible{outline:2px solid var(--brand-light);outline-offset:2px}
+
+:root{
+--bg:#ffffff;
+--fg:#09090f;
+--brand:#1a3a6b;
+--brand-mid:#2a5298;
+--brand-light:#4a90d9;
+--brand-deep:#0a1f3f;
+--brand-gold:#c9a227;
+--brand-teal:#0d7377;
+--surface:#f0f2f7;
+--surface-card:#ffffff;
+--ink:#09090f;
+--ink-soft:#5a6070;
+--ghost:#ced4e0;
+--hairline:#dde2eb;
+--on-brand:#ffffff;
+--radius-card:1.5rem;
+--radius-card-lg:2rem;
+--radius-pill:62.5rem;
+}
+
+html{font-size:16px;scroll-behavior:auto}
+@media(max-width:1920px){html{font-size:0.833333vw}}
+@media(max-width:1440px){html{font-size:1.111111vw}}
+@media(max-width:1024px){html{font-size:1.5625vw}}
+@media(max-width:640px){html{font-size:min(4.444444vw,17.5px)}}
+
+/* ── LENIS (official recommended styles) ────── */
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto !important}
+.lenis.lenis-smooth [data-lenis-prevent]{overscroll-behavior:contain}
+.lenis.lenis-stopped{overflow:hidden}
+.lenis.lenis-smooth iframe{pointer-events:none}
+
+body{
+  font-family:'Onest',system-ui,sans-serif;
+  font-weight:400;
+  background:var(--bg);
+  color:var(--fg);
+  min-height:100vh;
+  overflow-x:clip;
+}
+
+main{
+  width:100%;
+  overflow-x:clip;
+  padding:0.5rem;
+}
+@media(min-width:640px){main{padding:0.75rem}}
+
+/* ── LOADER ─────────────────────────────────── */
+#loader{
+  position:fixed;inset:0;z-index:200;
+  background:var(--brand-deep);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:2rem;color:var(--on-brand);
+  transition:transform 850ms cubic-bezier(0.76,0,0.24,1);
+}
+#loader.exit{transform:translateY(-105%)}
+.loader-brand{
+  display:flex;align-items:center;gap:0.75rem;
+  font-size:1.5rem;font-weight:500;
+  letter-spacing:0.18em;text-transform:uppercase;
+  opacity:0;transform:translateY(16px);
+  transition:opacity 600ms ease,transform 600ms ease;
+}
+.loader-brand.show{opacity:1;transform:translateY(0)}
+.loader-brain{
+  width:2rem;height:2rem;
+  border:1.5px solid rgba(255,255,255,0.7);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;
+}
+.loader-track{
+  width:10rem;height:1px;
+  background:rgba(255,255,255,0.2);
+  border-radius:62.5rem;overflow:hidden;
+}
+.loader-fill{
+  height:100%;width:100%;
+  background:#fff;
+  transform:scaleX(0);transform-origin:left;
+  transition:transform 1280ms cubic-bezier(0.65,0,0.35,1) 120ms;
+}
+.loader-fill.go{transform:scaleX(1)}
+
+/* ── HEADER ─────────────────────────────────── */
+header{
+  position:relative;z-index:30;
+  display:flex;align-items:center;
+  padding:1.5rem 1.5rem 0;
+}
+@media(min-width:640px){header{padding:2rem 2.5rem 0}}
+.header-nav{
+  display:none;flex:1;gap:2rem;
+  font-size:0.75rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;
+  color:rgba(255,255,255,0.85);
+}
+@media(min-width:1024px){.header-nav{display:flex}}
+.header-nav a:hover{color:#fff}
+.header-brand{
+  flex:1;display:flex;justify-content:center;align-items:center;
+  gap:0.5rem;font-size:0.85rem;font-weight:500;
+  letter-spacing:0.22em;text-transform:uppercase;color:#fff;
+}
+.brand-mark{
+  width:1.5rem;height:1.5rem;
+  border:1.5px solid rgba(255,255,255,0.8);
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:0.7rem;font-weight:700;
+  background:rgba(255,255,255,0.08);
+}
+.header-right{
+  flex:1;display:flex;justify-content:flex-end;align-items:center;gap:1rem;
+}
+.btn-visit-sm{
+  display:none;
+  font-size:0.7rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;
+  color:rgba(255,255,255,0.9);border-bottom:1px solid rgba(255,255,255,0.4);
+  transition:color 0.2s,border-color 0.2s;
+}
+@media(min-width:640px){.btn-visit-sm{display:block}}
+.btn-visit-sm:hover{color:#fff;border-color:#fff}
+.burger{
+  width:2.5rem;height:2.5rem;
+  background:rgba(255,255,255,0.12);
+  backdrop-filter:blur(8px);
+  border-radius:62.5rem;
+  display:grid;place-items:center;
+  transition:background 0.2s;
+}
+.burger:hover{background:rgba(255,255,255,0.22)}
+.burger-lines{display:flex;flex-direction:column;gap:5px}
+.burger-lines span{
+  display:block;width:1rem;height:1px;background:#fff;
+}
+
+/* ── HERO ────────────────────────────────────── */
+#hero{
+  position:relative;isolation:isolate;overflow:hidden;
+  border-radius:var(--radius-card-lg);
+  background:var(--brand-deep);
+  color:var(--on-brand);
+  min-height:calc(100svh - 1rem);
+  /* min-height, not height: the headline + four-line acronym must never be clipped
+     on short laptop windows or phones */
+
+  display:flex;flex-direction:column;
+}
+@media(min-width:640px){#hero{min-height:calc(100svh - 1.5rem)}}
+.hero-bg-wrap{
+  position:absolute;inset:0;z-index:-10;
+}
+.hero-bg-plate{
+  position:absolute;left:0;right:0;top:-10%;height:120%;width:100%;
+  will-change:transform;
+}
+.hero-bg-plate img{
+  width:100%;height:100%;object-fit:cover;
+  display:block;
+}
+.hero-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom,rgba(10,31,63,0.82),rgba(10,31,63,0.55),rgba(10,31,63,0.88));
+}
+.hero-title-block{
+  padding:0.75rem 1.5rem 0;
+}
+@media(min-width:640px){.hero-title-block{padding:0.75rem 2.5rem 0}}
+.hero-wordmark{
+  display:flex;align-items:baseline;gap:0.55rem;
+  margin-bottom:0.5rem;
+  font-family:'Onest',system-ui,sans-serif;
+  font-size:clamp(1.75rem,min(5.2vw,8svh),4.5rem);
+  font-weight:800;line-height:1;
+  letter-spacing:0.01em;text-transform:uppercase;
+  color:#fff;
+  opacity:0;transform:translateY(18px);
+}
+.hero-wordmark .wm-year{color:var(--brand-gold)}
+.hero-wordmark.revealed{
+  transition:opacity 800ms ease 120ms, transform 800ms cubic-bezier(0.16,1,0.3,1) 120ms;
+  opacity:1;transform:translateY(0);
+}
+#hero-title{
+  font-size:clamp(2.75rem,min(10vw,16.5svh),11rem);
+  font-weight:700;
+  text-transform:uppercase;
+  line-height:0.85;
+  letter-spacing:-0.02em;
+  white-space:normal;
+  font-family:'Onest',system-ui,sans-serif;
+}
+.word-clip{
+  display:inline-block;overflow:hidden;vertical-align:bottom;
+  padding-bottom:0.12em;
+}
+.word-inner{
+  display:inline-block;
+  transform:translateY(115%);
+  opacity:0;
+}
+.word-inner.revealed{
+  transition:transform 1100ms cubic-bezier(0.16,1,0.3,1), opacity 1100ms ease;
+  transform:translateY(0);opacity:1;
+}
+
+.hero-bottom{
+  margin-top:auto;
+  flex-shrink:0;
+  padding:0 1.5rem 2rem;
+  display:flex;flex-direction:column;gap:1.5rem;
+}
+@media(min-width:640px){
+  .hero-bottom{
+    flex-direction:row;align-items:flex-end;justify-content:space-between;
+    padding:0 2.5rem 2.5rem;
+  }
+}
+
+.hero-tagline{
+  font-size:clamp(1.15rem,min(2.7vw,3.9svh),2.5rem);
+  font-weight:500;text-transform:uppercase;
+  line-height:0.95;letter-spacing:-0.02em;
+  color:rgba(255,255,255,0.88);
+}
+.hero-tagline .acro{
+  font-weight:700;color:var(--brand-gold);
+}
+.line-clip{
+  display:block;overflow:hidden;
+  padding-bottom:0.14em;
+}
+.line-inner{
+  display:block;
+  transform:translateY(115%);opacity:0;
+}
+.line-inner.revealed{
+  transition:transform 900ms cubic-bezier(0.16,1,0.3,1), opacity 900ms ease;
+  transform:translateY(0);opacity:1;
+}
+
+/* date badge */
+.hero-date-badge{
+  display:inline-flex;align-items:center;gap:0.75rem;
+  border:1px solid rgba(255,255,255,0.2);
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(12px);
+  border-radius:var(--radius-pill);
+  padding:0.6rem 1.25rem;
+  font-size:0.75rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;
+  color:rgba(255,255,255,0.9);
+  opacity:0;transform:translateY(20px);
+  max-width:min(100%,36rem);
+  line-height:1.45;
+  text-align:left;
+}
+.hero-date-badge.revealed{
+  transition:opacity 800ms ease 900ms, transform 800ms cubic-bezier(0.16,1,0.3,1) 900ms;
+  opacity:1;transform:translateY(0);
+}
+.badge-dot{
+  width:0.5rem;height:0.5rem;border-radius:50%;
+  background:var(--brand-gold);
+  flex-shrink:0;
+}
+
+/* info cards */
+.hero-info-cluster{
+  display:flex;flex-direction:column;gap:0.75rem;
+  opacity:0;transform:translateY(28px);
+}
+.hero-info-cluster.revealed{
+  transition:opacity 800ms ease 780ms, transform 800ms cubic-bezier(0.16,1,0.3,1) 780ms;
+  opacity:1;transform:translateY(0);
+}
+.hero-card{
+  border:1px solid rgba(255,255,255,0.15);
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(12px);
+  border-radius:var(--radius-card);
+  padding:0.85rem 1rem;
+  display:flex;align-items:center;gap:0.75rem;
+  color:#fff;
+  max-width:20rem;
+}
+.hero-card-icon{
+  width:2.25rem;height:2.25rem;
+  background:rgba(255,255,255,0.12);
+  border-radius:0.75rem;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+  font-size:1rem;
+}
+.hero-card-label{font-size:0.6rem;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;opacity:0.65;margin-bottom:0.2rem}
+.hero-card-value{font-size:0.8rem;font-weight:500;line-height:1.3}
+
+/* ── THEMES / PROGRAMS SECTION ──────────────── */
+#themes{
+  background:var(--surface);
+  padding:4rem 1.5rem;
+  margin-top:0;
+  border-radius:var(--radius-card-lg);
+}
+@media(min-width:640px){#themes{padding:5rem 2.5rem}}
+
+.section-eyebrow{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  font-size:0.7rem;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;
+  color:var(--ink-soft);
+}
+.section-eyebrow::before{
+  content:'';width:0.375rem;height:0.375rem;border-radius:50%;
+  background:var(--brand);flex-shrink:0;
+}
+.section-eyebrow.light{color:rgba(255,255,255,0.7)}
+.section-eyebrow.light::before{background:var(--brand-light)}
+
+.section-h2{
+  font-size:clamp(2rem,4vw,3.5rem);font-weight:700;
+  line-height:0.95;letter-spacing:-0.02em;
+  margin-top:1rem;
+}
+.section-h2.light{color:#fff}
+
+.themes-grid{
+  display:grid;grid-template-columns:1fr;gap:1rem;margin-top:3rem;
+}
+@media(min-width:640px){.themes-grid{grid-template-columns:1fr 1fr}}
+@media(min-width:1024px){.themes-grid{grid-template-columns:repeat(3,1fr)}}
+
+.theme-card{
+  background:var(--surface-card);border-radius:var(--radius-card);
+  padding:1.5rem;display:flex;flex-direction:column;gap:0.75rem;
+  opacity:0;transform:translateY(26px);
+  border:1px solid var(--hairline);
+  transition:box-shadow 0.2s;
+}
+.theme-card.inview{
+  transition:opacity 600ms ease, transform 600ms cubic-bezier(0.16,1,0.3,1), box-shadow 0.2s;
+}
+.theme-card.inview.active{opacity:1;transform:translateY(0)}
+.theme-card:hover{box-shadow:0 8px 32px rgba(10,31,63,0.08)}
+.theme-icon{
+  width:2.75rem;height:2.75rem;border-radius:0.75rem;
+  background:var(--surface);display:flex;align-items:center;justify-content:center;
+  font-size:1.2rem;flex-shrink:0;
+}
+.theme-title{font-size:0.875rem;font-weight:700;line-height:1.3;color:var(--brand)}
+.theme-list{
+  list-style:none;margin-top:0.25rem;
+}
+.theme-list li{
+  font-size:0.7rem;color:var(--ink-soft);line-height:1.6;
+  padding:0.15rem 0;
+  border-bottom:1px solid var(--hairline);
+}
+.theme-list li:last-child{border-bottom:none}
+
+/* ── SPEAKERS SECTION ───────────────────────── */
+#speakers{
+  background:var(--bg);
+  border-radius:var(--radius-card-lg);
+  margin-top:-2.5rem;
+  padding:4rem 1.5rem 5rem;
+}
+@media(min-width:640px){#speakers{padding:5rem 2.5rem 6rem}}
+
+/* international / national groups */
+.voices-group{margin-top:3rem}
+.voices-group-title{
+  display:flex;align-items:center;gap:0.75rem;
+  font-size:0.7rem;font-weight:600;
+  letter-spacing:0.22em;text-transform:uppercase;
+  color:var(--brand-teal);
+  margin-bottom:1.25rem;
+}
+.voices-group-title::after{
+  content:'';flex:1;height:1px;background:var(--hairline);
+}
+.voices-group-title .voices-count{
+  font-size:0.6rem;letter-spacing:0.14em;
+  color:var(--ink-soft);
+  order:2;
+}
+.voices-group .speakers-grid{margin-top:0}
+.voices-note{
+  font-size:0.72rem;color:var(--ink-soft);line-height:1.6;
+  margin-top:1rem;
+}
+
+.speakers-grid{
+  display:grid;grid-template-columns:1fr;gap:1.25rem;margin-top:3rem;
+}
+@media(min-width:640px){.speakers-grid{grid-template-columns:1fr 1fr}}
+
+.speaker-card{
+  border-radius:var(--radius-card);overflow:hidden;
+  background:var(--surface);
+  display:flex;align-items:stretch;
+  opacity:0;transform:translateY(40px);
+  border:1px solid var(--hairline);
+}
+.speaker-card.inview{
+  transition:opacity 600ms ease, transform 600ms cubic-bezier(0.16,1,0.3,1);
+}
+.speaker-card.inview.active{opacity:1;transform:translateY(0)}
+.speaker-img-wrap{
+  width:6.5rem;flex-shrink:0;position:relative;overflow:hidden;
+  background:var(--brand);
+}
+@media(min-width:640px){.speaker-img-wrap{width:8.5rem}}
+.speaker-img-wrap::before{
+  content:attr(data-initials);
+  position:absolute;inset:0;
+  display:grid;place-items:center;
+  font-size:1.1rem;font-weight:700;letter-spacing:0.08em;
+  color:rgba(255,255,255,0.9);
+  background:linear-gradient(160deg,var(--brand-mid),var(--brand-deep));
+}
+.speaker-img-wrap img{
+  position:relative;z-index:1;
+  width:100%;height:100%;object-fit:cover;object-position:top center;
+  filter:grayscale(15%);
+}
+.speaker-img-wrap img.is-missing{visibility:hidden}
+.speaker-mode-badge{
+  position:absolute;z-index:2;top:0.5rem;left:0.5rem;
+  background:rgba(10,31,63,0.75);backdrop-filter:blur(4px);
+  color:#fff;font-size:0.5rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;
+  padding:0.2rem 0.45rem;border-radius:62.5rem;
+}
+.speaker-mode-badge.national{background:rgba(13,115,119,0.85)}
+.speaker-info{padding:1.25rem 1rem;display:flex;flex-direction:column;justify-content:center;gap:0.5rem}
+.speaker-name{font-size:0.95rem;font-weight:700;color:var(--brand)}
+.speaker-role{font-size:0.65rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--brand-teal)}
+.speaker-institution{font-size:0.7rem;color:var(--ink-soft);line-height:1.4;margin-top:0.25rem}
+.speaker-bio{font-size:0.68rem;color:var(--ink-soft);line-height:1.55;margin-top:0.4rem}
+
+/* ── STATS ──────────────────────────────────── */
+#stats{
+  background:var(--brand-deep);color:var(--on-brand);
+  border-radius:var(--radius-card-lg);
+  margin-top:0.75rem;
+  padding:5rem 1.5rem;
+}
+@media(min-width:640px){#stats{padding:5rem 2.5rem}}
+.stats-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:2rem 2rem;
+  margin-top:4rem;
+}
+@media(min-width:1024px){.stats-grid{grid-template-columns:repeat(4,1fr)}}
+.stat-cell{
+  border-top:1px solid rgba(255,255,255,0.18);
+  padding-top:1.25rem;
+  opacity:0;transform:translateY(30px);
+}
+.stat-cell.inview{
+  transition:opacity 600ms ease, transform 600ms cubic-bezier(0.16,1,0.3,1);
+}
+.stat-cell.inview.active{opacity:1;transform:translateY(0)}
+.stat-val{
+  font-size:clamp(2.5rem,5vw,5rem);
+  font-weight:700;letter-spacing:-0.03em;line-height:1;
+}
+.stat-label{
+  font-size:0.8rem;color:rgba(255,255,255,0.6);
+  margin-top:0.75rem;line-height:1.4;
+}
+
+/* ── TEAM ACCORDION ─────────────────────────── */
+#team{
+  background:var(--surface);
+  border-radius:var(--radius-card-lg);
+  margin-top:0.75rem;
+  padding:4rem 1.5rem;
+}
+@media(min-width:640px){#team{padding:5rem 2.5rem}}
+
+/* fancy "Core Team" label */
+.team-label{
+  display:flex;align-items:center;gap:1rem;
+  margin-top:3rem;
+}
+.team-label-rule{
+  flex:1 1 auto;height:1px;
+  background:linear-gradient(90deg,transparent,var(--brand-gold));
+}
+.team-label-rule:last-child{
+  background:linear-gradient(90deg,var(--brand-gold),transparent);
+}
+.team-label-pill{
+  display:inline-flex;align-items:center;gap:0.55rem;
+  flex-shrink:0;
+  padding:0.5rem 1.15rem;
+  border-radius:var(--radius-pill);
+  border:1px solid rgba(201,162,39,0.5);
+  background:linear-gradient(180deg,#fffdf6,#f4efdd);
+  box-shadow:0 1px 0 rgba(255,255,255,0.9) inset,0 8px 20px -14px rgba(10,31,63,0.55);
+  font-family:'Playfair Display',serif;font-style:italic;font-weight:400;
+  font-size:1rem;letter-spacing:0.01em;
+  color:var(--brand-deep);
+  white-space:nowrap;
+}
+.team-label-pill::before{
+  content:'';width:0.3rem;height:0.3rem;border-radius:50%;
+  background:var(--brand-gold);flex-shrink:0;
+}
+@media(min-width:640px){.team-label-pill{font-size:1.15rem;padding:0.55rem 1.4rem}}
+.acc-wrap{
+  display:flex;flex-direction:column;gap:0.5rem;
+  margin-top:2rem;
+}
+.acc-item{
+  position:relative;overflow:hidden;isolation:isolate;
+  border-radius:var(--radius-card);
+  background:var(--brand-deep);
+  flex:0 0 auto;min-width:0;
+  height:18rem;
+  opacity:0;transform:translateY(30px);
+  transition:opacity 600ms ease,
+             transform 600ms cubic-bezier(0.16,1,0.3,1),
+             flex-grow 480ms cubic-bezier(0.5,0.85,0.25,1.15),
+             flex-basis 480ms cubic-bezier(0.5,0.85,0.25,1.15);
+  outline-offset:-2px;
+}
+/* desktop: height follows width (aspect-ratio) so the wide hovered card
+   never stretches into a letterbox that decapitates the portraits */
+@media(min-width:768px){
+  .acc-wrap{
+    flex-direction:row;height:auto;
+    aspect-ratio:1600/700;
+    max-width:80rem;
+    margin-left:auto;margin-right:auto;
+  }
+  .acc-item{flex:1 1 0;height:auto}
+}
+.acc-item.inview.active{opacity:1;transform:translateY(0)}
+.acc-item img{
+  width:100%;height:100%;object-fit:cover;object-position:center 20%;
+  transition:transform 700ms cubic-bezier(0.16,1,0.3,1);
+}
+/* frosted veil over the collapsed neighbours */
+.acc-item::after{
+  content:'';position:absolute;inset:0;z-index:1;
+  background:rgba(240,242,247,0.22);
+  -webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);
+  opacity:0;transition:opacity 300ms ease;pointer-events:none;
+}
+@media(min-width:768px){
+  .acc-wrap:hover .acc-item{flex-grow:0;flex-basis:21%}
+  .acc-wrap:hover .acc-item:hover{flex-grow:1;flex-basis:21%}
+  .acc-wrap .acc-item:focus-within{flex-grow:1;flex-basis:21%}
+  .acc-wrap:hover .acc-item:not(:hover)::after{opacity:1}
+  .acc-item:hover img{transform:scale(1.06)}
+}
+.acc-caption{
+  position:absolute;z-index:2;left:0;right:0;bottom:0;
+  padding:1.25rem;
+  background:linear-gradient(to top,rgba(6,14,28,0.92),rgba(6,14,28,0.45) 55%,transparent);
+  color:#fff;
+}
+.acc-name{font-size:1rem;font-weight:700;line-height:1.2}
+.acc-role{
+  font-size:0.7rem;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;
+  color:rgba(255,255,255,0.72);margin-top:0.35rem;line-height:1.4;
+}
+@media(min-width:768px){
+  .acc-name,.acc-role{
+    opacity:0;transform:translateY(0.75rem);
+    transition:opacity 260ms ease,transform 260ms cubic-bezier(0.16,1,0.3,1);
+  }
+  .acc-name{transition-delay:80ms}
+  .acc-item:hover .acc-name,.acc-item:hover .acc-role,
+  .acc-item:focus-within .acc-name,.acc-item:focus-within .acc-role{
+    opacity:1;transform:translateY(0);
+  }
+}
+
+/* editorial team — sits under the core team accordion */
+.editorial-label{margin-top:4.5rem}
+.editorial-grid{
+  display:grid;grid-template-columns:1fr;
+  gap:0.7rem;margin-top:1.75rem;
+}
+@media(min-width:640px){
+  .editorial-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr));gap:1.25rem;
+    margin:2rem auto 0;max-width:56rem;
+  }
+}
+.editorial-card{
+  display:flex;flex-direction:row;align-items:stretch;
+  background:var(--surface-card);
+  border:1px solid var(--hairline);
+  border-radius:var(--radius-card);
+  overflow:hidden;
+}
+@media(min-width:640px){.editorial-card{flex-direction:column}}
+.editorial-photo{
+  margin:0;flex:0 0 40%;aspect-ratio:3/4;overflow:hidden;background:var(--surface);
+}
+@media(min-width:640px){.editorial-photo{flex:0 0 auto;aspect-ratio:1/1}}
+.editorial-photo img{
+  width:100%;height:100%;object-fit:cover;object-position:center 18%;
+  transition:transform 700ms cubic-bezier(0.16,1,0.3,1);
+}
+@media(hover:hover){.editorial-card:hover .editorial-photo img{transform:scale(1.04)}}
+.editorial-body{
+  flex:1 1 auto;min-width:0;
+  padding:0.9rem 1rem;display:flex;flex-direction:column;justify-content:center;
+}
+@media(min-width:640px){.editorial-body{padding:1.05rem 1.15rem 1.2rem;display:block}}
+.editorial-name{
+  font-size:0.86rem;font-weight:600;line-height:1.3;
+  color:var(--brand);letter-spacing:-0.005em;
+}
+@media(min-width:640px){.editorial-name{font-size:0.9rem}}
+.editorial-role{
+  font-size:0.6rem;line-height:1.6;letter-spacing:0.05em;
+  text-transform:uppercase;color:var(--ink-soft);margin-top:0.4rem;
+}
+
+/* ── OUTCOMES / TESTIMONIALS ────────────────── */
+#outcomes{
+  background:var(--bg);
+  padding:5rem 1.5rem;
+}
+@media(min-width:640px){#outcomes{padding:5rem 2.5rem}}
+.outcomes-grid{
+  display:grid;grid-template-columns:1fr;gap:1.25rem;margin-top:3.5rem;
+  list-style:none;
+}
+@media(min-width:640px){.outcomes-grid{grid-template-columns:1fr 1fr}}
+@media(min-width:1024px){.outcomes-grid{grid-template-columns:repeat(3,1fr)}}
+.outcome-card{
+  background:var(--surface);border-radius:var(--radius-card);
+  padding:1.75rem;display:flex;flex-direction:column;justify-content:space-between;
+  opacity:0;transform:translateY(40px);
+  transition:transform 0.3s ease;
+}
+.outcome-card.inview{
+  transition:opacity 600ms ease, transform 600ms cubic-bezier(0.16,1,0.3,1);
+}
+.outcome-card.inview.active{opacity:1;transform:translateY(0)}
+.outcome-card:hover{transform:translateY(-6px) !important;transition:transform 0.3s ease !important}
+.outcome-quote-mark{font-size:2.5rem;color:var(--brand);line-height:1}
+.outcome-text{font-size:1rem;line-height:1.6;color:var(--ink);margin-top:0.75rem;flex:1}
+.outcome-footer{
+  border-top:1px solid var(--hairline);
+  padding-top:1rem;margin-top:1.5rem;
+}
+.outcome-name{font-size:0.875rem;font-weight:500}
+.outcome-role{font-size:0.75rem;color:var(--ink-soft)}
+
+/* ── REGISTRATION ───────────────────────────── */
+#registration{
+  background:var(--surface);
+  border-radius:var(--radius-card-lg);
+  margin-top:0.75rem;
+  padding:4rem 1.5rem;
+}
+@media(min-width:640px){#registration{padding:5rem 2.5rem}}
+.reg-grid{
+  display:grid;grid-template-columns:1fr;gap:1rem;margin-top:3rem;
+}
+@media(min-width:640px){.reg-grid{grid-template-columns:repeat(3,1fr)}}
+.reg-card{
+  background:var(--surface-card);border-radius:var(--radius-card);
+  padding:2rem 1.5rem;
+  border:2px solid var(--hairline);
+  display:flex;flex-direction:column;gap:1rem;
+  opacity:0;transform:translateY(28px);
+}
+.reg-card.inview{
+  transition:opacity 600ms ease, transform 600ms cubic-bezier(0.16,1,0.3,1);
+}
+.reg-card.inview.active{opacity:1;transform:translateY(0)}
+.reg-card.featured{
+  background:var(--brand-deep);color:#fff;
+  border-color:var(--brand-deep);
+}
+.reg-type{font-size:0.65rem;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink-soft)}
+.reg-card.featured .reg-type{color:rgba(255,255,255,0.6)}
+.reg-price{font-size:2.25rem;font-weight:700;line-height:1;color:var(--brand)}
+.reg-card.featured .reg-price{color:var(--brand-gold)}
+.reg-price span{font-size:0.9rem;font-weight:400;opacity:0.7}
+.reg-who{font-size:0.75rem;color:var(--ink-soft);line-height:1.5}
+.reg-card.featured .reg-who{color:rgba(255,255,255,0.65)}
+.reg-btn{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  border-radius:var(--radius-pill);padding:0.75rem 1.5rem;
+  font-size:0.75rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;
+  background:var(--ink);color:#fff;
+  transition:background 0.2s;align-self:flex-start;
+  cursor:pointer;border:none;font-family:inherit;
+}
+.reg-btn:hover{background:var(--brand)}
+.reg-card.featured .reg-btn{background:var(--brand-gold);color:var(--brand-deep)}
+.reg-card.featured .reg-btn:hover{background:#e0b53a}
+
+.reg-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0.55rem}
+.reg-list li{
+  display:flex;justify-content:space-between;align-items:baseline;gap:1rem;
+  font-size:0.8rem;
+  padding-bottom:0.55rem;
+  border-bottom:1px solid rgba(255,255,255,0.14);
+}
+.reg-list li:last-child{border-bottom:none;padding-bottom:0}
+.reg-card.featured .reg-list li span:first-child{color:rgba(255,255,255,0.78)}
+.reg-amt{font-weight:700;font-size:1.05rem;color:var(--brand-gold);white-space:nowrap}
+.reg-amt i{font-style:normal;font-size:0.7rem;font-weight:400;opacity:0.7;letter-spacing:0.08em}
+.reg-note{font-size:0.78rem;line-height:1.6;color:var(--ink-soft);margin:0}
+.reg-note.muted{font-size:0.72rem;opacity:0.8}
+
+/* ── KEY DATES ───────────────────────────────── */
+#dates{
+  background:#fff;
+  border-radius:var(--radius-card-lg);
+  margin-top:0.75rem;
+  padding:4rem 1.5rem;
+}
+@media(min-width:640px){#dates{padding:5rem 2.5rem}}
+.dates-list{
+  list-style:none;margin:2.5rem 0 0;padding:0;
+  display:flex;flex-direction:column;
+  border-top:1px solid var(--hairline);
+}
+.date-row{
+  display:grid;grid-template-columns:1fr auto;
+  align-items:baseline;gap:0.35rem 1.5rem;
+  padding:1.15rem 0;
+  border-bottom:1px solid var(--hairline);
+}
+@media(min-width:768px){
+  .date-row{grid-template-columns:minmax(0,1fr) auto;gap:2rem;padding:1.35rem 0}
+}
+.date-label{
+  font-size:0.8rem;letter-spacing:0.02em;
+  color:var(--ink-soft);
+}
+.date-value{
+  font-size:0.95rem;font-weight:600;
+  color:var(--brand);white-space:nowrap;
+  font-variant-numeric:tabular-nums;
+}
+.date-value.tba{font-weight:400;color:var(--ink-soft);opacity:0.7;font-style:italic}
+.date-row.highlight .date-value{color:var(--brand-gold);font-weight:700}
+.date-row.highlight .date-label{color:var(--brand);font-weight:600}
+
+/* ── SUBMISSION GUIDELINES & ETHICS ─────────── */
+#guidelines{
+  background:#fff;
+  border-radius:var(--radius-card-lg);
+  margin-top:0.75rem;
+  padding:4rem 1.5rem;
+}
+@media(min-width:640px){#guidelines{padding:5rem 2.5rem}}
+.guide-lede{
+  font-size:0.9rem;font-weight:600;color:var(--brand);
+  margin:1rem 0 0;max-width:56rem;line-height:1.5;
+}
+.guide-intro{
+  font-size:0.8rem;line-height:1.75;color:var(--ink-soft);
+  margin:0.85rem 0 0;max-width:60rem;
+}
+.guide-list{
+  list-style:none;margin:2rem 0 0;padding:0;
+  display:grid;grid-template-columns:1fr;gap:0.65rem;
+}
+@media(min-width:1024px){.guide-list{grid-template-columns:1fr 1fr;gap:0.85rem}}
+.guide-item{
+  display:flex;gap:0.8rem;
+  border:1px solid var(--hairline);border-radius:var(--radius-card);
+  background:var(--surface-card);
+  padding:1rem 1.05rem 1.05rem;
+}
+.guide-num{
+  flex:0 0 1.35rem;padding-top:0.1rem;
+  font-size:0.7rem;font-weight:700;letter-spacing:0.02em;
+  color:var(--brand-gold);font-variant-numeric:tabular-nums;
+}
+.guide-body{min-width:0;flex:1 1 auto}
+.guide-body h3{
+  margin:0;font-size:0.84rem;font-weight:600;line-height:1.4;
+  color:var(--brand);letter-spacing:-0.005em;
+}
+.guide-body p{
+  margin:0.4rem 0 0;
+  font-size:0.76rem;line-height:1.72;color:var(--ink-soft);
+}
+.guide-body ul{
+  margin:0.45rem 0 0;padding-left:1rem;
+  font-size:0.76rem;line-height:1.7;color:var(--ink-soft);
+}
+.guide-body li{margin:0.15rem 0}
+.guide-body strong{color:var(--brand);font-weight:600}
+.guide-note{
+  margin-top:0.85rem;
+  border:1px solid rgba(201,162,39,0.45);
+  border-left:3px solid var(--brand-gold);
+  background:linear-gradient(180deg,#fffdf6,#faf4e5);
+  border-radius:var(--radius-card);
+  padding:1.05rem 1.15rem;
+}
+.guide-note h3{
+  margin:0;font-size:0.84rem;font-weight:700;letter-spacing:0.02em;
+  color:var(--brand-deep);text-transform:uppercase;
+}
+.guide-note p{
+  margin:0.45rem 0 0;font-size:0.76rem;line-height:1.72;color:var(--ink-soft);
+}
+.guide-h2{
+  margin-top:3.5rem;
+  font-size:clamp(1.6rem,3vw,2.6rem);
+}
+@media(min-width:640px){.guide-h2{font-size:clamp(1.8rem,2.6vw,2.8rem)}}
+
+/* ── FOOTER ─────────────────────────────────── */
+footer{
+  background:var(--brand-deep);color:var(--on-brand);
+  border-radius:var(--radius-card-lg);
+  margin-top:0.75rem;
+  padding:3.5rem 1.5rem;
+}
+@media(min-width:640px){footer{padding:4rem 2.5rem}}
+
+.footer-cta-band{
+  border-bottom:1px solid rgba(255,255,255,0.12);
+  padding-bottom:3.5rem;
+  display:flex;flex-direction:column;gap:2rem;
+}
+@media(min-width:640px){
+  .footer-cta-band{flex-direction:row;justify-content:space-between;align-items:flex-end}
+}
+.footer-cta-title{
+  font-size:clamp(2.5rem,6vw,5.5rem);
+  font-weight:700;line-height:0.9;letter-spacing:-0.02em;
+  margin-top:1rem;
+}
+
+.pill-btn{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  border-radius:var(--radius-pill);padding:0.875rem 1.75rem;
+  font-size:0.75rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;
+  cursor:pointer;border:none;font-family:inherit;
+  transition:background 0.2s,color 0.2s;
+}
+.pill-btn.light{background:#fff;color:var(--brand-deep)}
+.pill-btn.light:hover{background:var(--brand-light);color:#fff}
+.pill-btn.dark{background:var(--ink);color:#fff}
+.pill-btn.dark:hover{background:var(--brand)}
+.pill-btn svg{transition:transform 0.2s}
+.pill-btn:hover svg{transform:translateX(4px)}
+
+.footer-cols{
+  display:grid;grid-template-columns:1fr;gap:2.5rem;
+  padding:3.5rem 0;
+}
+@media(min-width:640px){.footer-cols{grid-template-columns:1.4fr 1fr 1fr 1fr}}
+
+.footer-brand-name{
+  display:flex;align-items:center;gap:0.6rem;
+  font-size:1rem;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;
+}
+.footer-blurb{font-size:0.8rem;color:rgba(255,255,255,0.6);line-height:1.6;margin-top:1rem;max-width:22rem}
+.footer-address{
+  font-style:normal;margin-top:1.5rem;
+  font-size:0.8rem;color:rgba(255,255,255,0.75);
+  line-height:1.7;
+}
+.footer-address a{color:rgba(255,255,255,0.75);transition:color 0.2s}
+.footer-address a:hover{color:#fff}
+.footer-address .muted{color:rgba(255,255,255,0.45)}
+
+.footer-nav-heading{
+  font-size:0.65rem;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;
+  color:rgba(255,255,255,0.45);margin-bottom:1rem;
+}
+.footer-nav-list{list-style:none;display:flex;flex-direction:column;gap:0.75rem}
+.footer-nav-list a{font-size:0.8rem;color:rgba(255,255,255,0.75);transition:color 0.2s}
+.footer-nav-list a:hover{color:#fff}
+
+.footer-bottom{
+  border-top:1px solid rgba(255,255,255,0.12);
+  padding-top:2rem;
+  display:flex;flex-direction:column;gap:1rem;
+  font-size:0.75rem;color:rgba(255,255,255,0.5);
+}
+@media(min-width:640px){
+  .footer-bottom{flex-direction:row;justify-content:space-between;align-items:center}
+}
+.footer-social{display:flex;gap:1.25rem}
+.footer-social a{color:rgba(255,255,255,0.55);transition:color 0.2s}
+.footer-social a:hover{color:#fff}
+.footer-legal{display:flex;gap:1.25rem;align-items:center}
+.footer-legal a{color:rgba(255,255,255,0.5);transition:color 0.2s}
+.footer-legal a:hover{color:rgba(255,255,255,0.8)}
+
+/* easter egg — hover the tiny mark at the very bottom right */
+.alby-mark{
+  font-size:0.5rem;line-height:1;
+  letter-spacing:0.45em;text-transform:lowercase;
+  color:rgba(255,255,255,0.10);
+  cursor:default;user-select:none;
+  padding-left:0.4em;
+  transition:color 0.45s ease,letter-spacing 0.45s ease,text-shadow 0.45s ease;
+}
+.alby-mark::before{
+  content:'◆';
+  font-size:0.55em;vertical-align:middle;
+  margin-right:0.7em;
+  color:rgba(201,162,39,0.28);
+  transition:color 0.45s ease;
+}
+.alby-mark:hover{
+  color:var(--brand-gold);
+  letter-spacing:0.62em;
+  text-shadow:0 0 14px rgba(201,162,39,0.55);
+}
+.alby-mark:hover::before{color:var(--brand-gold)}
+
+/* ── MODAL ──────────────────────────────────── */
+#modal{
+  position:fixed;inset:0;z-index:90;
+  display:flex;align-items:flex-end;justify-content:center;
+  padding:0.75rem;
+  pointer-events:none;opacity:0;
+  transition:opacity 0.3s ease;
+}
+@media(min-width:640px){#modal{align-items:center;padding:1.5rem}}
+#modal.open{pointer-events:auto;opacity:1}
+.modal-backdrop{
+  position:absolute;inset:0;
+  background:rgba(10,31,63,0.45);backdrop-filter:blur(8px);
+}
+.modal-panel{
+  position:relative;z-index:1;
+  background:var(--surface-card);color:var(--ink);
+  border-radius:var(--radius-card-lg);
+  padding:1.5rem;
+  max-width:32rem;width:100%;
+  max-height:92svh;overflow-y:auto;
+  overscroll-behavior:contain;
+  box-shadow:0 32px 80px rgba(0,0,0,0.25);
+  transform:translateY(28px) scale(0.96);
+  transition:transform 0.35s cubic-bezier(0.16,1,0.3,1);
+}
+#modal.open .modal-panel{transform:translateY(0) scale(1)}
+@media(min-width:640px){.modal-panel{padding:2rem}}
+.modal-header{position:relative}
+.modal-close{
+  position:absolute;top:0;right:0;
+  width:2.5rem;height:2.5rem;border-radius:50%;
+  background:var(--surface);
+  display:grid;place-items:center;
+  transition:background 0.2s,transform 0.3s;
+}
+.modal-close:hover{background:var(--hairline);transform:rotate(90deg)}
+.modal-h2{font-size:clamp(1.75rem,3vw,2.5rem);font-weight:700;line-height:0.95;margin-top:0.75rem}
+.modal-form{margin-top:1.75rem;display:flex;flex-direction:column;gap:1rem}
+.field-label{display:block;font-size:0.65rem;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:0.4rem}
+.field-input{
+  width:100%;border-radius:0.75rem;
+  border:1px solid var(--hairline);
+  background:var(--bg);padding:0.75rem 1rem;
+  font-size:0.875rem;font-family:inherit;
+  transition:border-color 0.2s;outline:none;color:var(--ink);
+}
+.field-input:focus{border-color:var(--brand-light)}
+textarea.field-input{resize:vertical;min-height:5rem}
+.modal-submit{
+  border-radius:var(--radius-pill);background:var(--ink);color:#fff;
+  padding:0.875rem 1.75rem;font-size:0.8rem;font-weight:500;
+  letter-spacing:0.1em;text-transform:uppercase;
+  border:none;font-family:inherit;cursor:pointer;
+  transition:background 0.2s;
+}
+.modal-submit:hover:not(:disabled){background:var(--brand)}
+.modal-submit:disabled{opacity:0.6;cursor:not-allowed}
+.modal-success{
+  margin-top:2rem;background:var(--surface);border-radius:var(--radius-card);
+  padding:1.5rem;text-align:center;display:none;
+}
+.modal-success.show{display:block}
+.success-icon{
+  width:3rem;height:3rem;border-radius:50%;
+  background:var(--brand);display:grid;place-items:center;
+  margin:0 auto 1rem;
+}
+.modal-success h3{font-size:1.125rem;font-weight:500}
+.modal-success p{font-size:0.8rem;color:var(--ink-soft);margin-top:0.5rem;line-height:1.5}
+.modal-success-btn{
+  margin-top:1.25rem;border-radius:var(--radius-pill);
+  background:var(--ink);color:#fff;padding:0.75rem 1.5rem;
+  font-size:0.75rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;
+  border:none;font-family:inherit;cursor:pointer;transition:background 0.2s;
+}
+.modal-success-btn:hover{background:var(--brand)}
+
+/* ── MENU OVERLAY ───────────────────────────── */
+#menu{
+  position:fixed;inset:0;z-index:70;
+  display:flex;flex-direction:column;
+  pointer-events:none;
+}
+#menu.open{pointer-events:auto}
+.menu-backdrop{
+  position:absolute;inset:0;background:var(--brand-deep);
+  opacity:0;transition:opacity 0.4s ease;
+}
+#menu.open .menu-backdrop{opacity:1}
+.menu-panel{
+  position:relative;z-index:1;
+  height:100%;display:flex;flex-direction:column;
+  padding:0.5rem;
+  opacity:0;transform:translateY(-24px);
+  transition:opacity 0.4s ease, transform 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+@media(min-width:640px){.menu-panel{padding:0.75rem}}
+#menu.open .menu-panel{opacity:1;transform:translateY(0)}
+.menu-top{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.5rem 1.5rem 0;
+}
+@media(min-width:640px){.menu-top{padding:2rem 2.5rem 0}}
+.menu-brand{
+  display:flex;align-items:center;gap:0.6rem;
+  font-size:0.9rem;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:#fff;
+}
+.menu-close{
+  width:2.5rem;height:2.5rem;border-radius:50%;
+  background:rgba(255,255,255,0.12);
+  display:grid;place-items:center;color:#fff;
+  transition:background 0.2s,transform 0.3s;
+}
+.menu-close:hover{background:rgba(255,255,255,0.22);transform:rotate(90deg)}
+.menu-nav{
+  flex:1;display:flex;flex-direction:column;justify-content:center;
+  padding:0 1.5rem;gap:0.5rem;
+}
+@media(min-width:640px){.menu-nav{padding:0 2.5rem}}
+.menu-link{
+  display:block;
+  font-size:clamp(2.5rem,7vw,5rem);
+  font-weight:700;line-height:1.05;letter-spacing:-0.02em;
+  color:rgba(255,255,255,0.85);
+  transition:color 0.2s;
+  opacity:0;transform:translateY(28px);
+}
+.menu-link:hover{color:var(--brand-light)}
+#menu.open .menu-link{
+  transition:opacity 0.4s ease, transform 0.4s cubic-bezier(0.16,1,0.3,1), color 0.2s;
+  opacity:1;transform:translateY(0);
+}
+#menu.open .menu-link:nth-child(1){transition-delay:120ms}
+#menu.open .menu-link:nth-child(2){transition-delay:190ms}
+#menu.open .menu-link:nth-child(3){transition-delay:260ms}
+#menu.open .menu-link:nth-child(4){transition-delay:330ms}
+#menu.open .menu-link:nth-child(5){transition-delay:400ms}
+.menu-bottom{
+  border-top:1px solid rgba(255,255,255,0.12);
+  padding:2rem 1.5rem 1.5rem;
+  display:flex;flex-direction:column;gap:1.5rem;
+}
+@media(min-width:640px){
+  .menu-bottom{flex-direction:row;align-items:center;justify-content:space-between;padding:2rem 2.5rem}
+}
+.menu-social{display:flex;gap:1.25rem}
+.menu-social a{font-size:0.75rem;color:rgba(255,255,255,0.6);letter-spacing:0.1em;text-transform:uppercase;transition:color 0.2s}
+.menu-social a:hover{color:#fff}
+
+/* ── INVIEW UTILITY ─────────────────────────── */
+.inview-ready{opacity:0;transform:translateY(28px)}
+.inview-ready.visible{
+  opacity:1;transform:translateY(0);
+  transition:opacity 600ms ease, transform 600ms cubic-bezier(0.16,1,0.3,1);
+}
+
+/* sponsor band */
+.sponsor-band{
+  padding:1.5rem;background:var(--surface);
+  border-radius:var(--radius-card);margin-top:2.5rem;
+}
+.sponsor-text{font-size:0.65rem;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-soft);text-align:center;margin-bottom:1rem}
+.sponsor-logos{
+  display:flex;flex-wrap:wrap;gap:1.5rem 2.5rem;justify-content:center;align-items:center;
+}
+.sponsor-logo-item{
+  font-size:0.75rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--ink-soft);opacity:0.6;
+}
+
+/* ── MOBILE (<640px) ────────────────────────── */
+@media(max-width:639.98px){
+  /* portraits stack above the copy instead of being squeezed into a
+     narrow column, which used to crop the faces heavily */
+  .speaker-card{flex-direction:column}
+  .speaker-img-wrap{width:100%;height:auto;aspect-ratio:1/1;flex:0 0 auto}
+  .speaker-img-wrap img{object-position:center 18%}
+  .speaker-info{padding:1.2rem 1.25rem 1.4rem;gap:0.45rem}
+  /* core team tiles keep close to the portrait's own proportion */
+  .acc-item{height:auto;aspect-ratio:4/5}
+  .acc-item img{object-position:center 14%}
+  .acc-caption{padding:1rem}
+  .acc-name{font-size:0.95rem}
+}
+
+@media(prefers-reduced-motion:reduce){
+  *{transition-duration:0.01ms !important;animation-duration:0.01ms !important}
+  .loader-fill{transition:none !important}
+}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader" aria-live="polite" aria-label="Loading MIND 2027">
+  <div class="loader-brand">
+    <div class="loader-brain">🧠</div>
+    MIND 2027
+  </div>
+  <div class="loader-track"><div class="loader-fill" id="loader-fill"></div></div>
+</div>
+
+<!-- MENU OVERLAY -->
+<div id="menu" role="dialog" aria-modal="true" aria-label="Navigation menu">
+  <div class="menu-backdrop" id="menu-backdrop"></div>
+  <div class="menu-panel">
+    <div class="menu-top">
+      <div class="menu-brand">
+        <div class="brand-mark">M</div>
+        MIND 2027
+      </div>
+      <button class="menu-close" id="menu-close" aria-label="Close menu">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <nav class="menu-nav" aria-label="Main navigation">
+      <a href="#themes" class="menu-link">Sub-Themes</a>
+      <a href="#speakers" class="menu-link">Speakers</a>
+      <a href="#stats" class="menu-link">Conference</a>
+      <a href="#outcomes" class="menu-link">Outcomes</a>
+      <a href="#dates" class="menu-link">Key Dates</a>
+      <a href="#registration" class="menu-link">Register</a>
+    </nav>
+    <div class="menu-bottom">
+      <button class="pill-btn light" id="menu-book-btn">
+        Submit Paper
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+      <div class="menu-social">
+        <a href="#">Academia</a>
+        <a href="#">ResearchGate</a>
+        <a href="#">LinkedIn</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT MODAL -->
+<div id="modal" role="dialog" aria-modal="true" aria-label="Submit paper / Register">
+  <div class="modal-backdrop" id="modal-backdrop"></div>
+  <div class="modal-panel" data-lenis-prevent>
+    <div class="modal-header">
+      <div class="section-eyebrow">Submit a paper</div>
+      <button class="modal-close" id="modal-close" aria-label="Close">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <h2 class="modal-h2">Join<br/>MIND 2027</h2>
+    </div>
+    <form class="modal-form" id="modal-form" novalidate>
+      <div>
+        <label class="field-label" for="field-name">Full name</label>
+        <input class="field-input" type="text" id="field-name" name="name" placeholder="Dr. Alex Rivera" autocomplete="name"/>
+      </div>
+      <div>
+        <label class="field-label" for="field-email">Email</label>
+        <input class="field-input" type="email" id="field-email" name="email" placeholder="you@university.edu" autocomplete="email"/>
+      </div>
+      <div>
+        <label class="field-label" for="field-institution">Institution / Affiliation</label>
+        <input class="field-input" type="text" id="field-institution" name="institution" placeholder="University of..."/>
+      </div>
+      <div>
+        <label class="field-label" for="field-paper">Paper title or area of interest</label>
+        <textarea class="field-input" id="field-paper" name="paper" rows="3" placeholder="My paper explores AI-assisted literary interpretation and the question of authorship…"></textarea>
+      </div>
+      <button type="submit" class="modal-submit" id="modal-submit">Submit Abstract</button>
+    </form>
+    <div class="modal-success" id="modal-success">
+      <div class="success-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M5 13l4 4L19 7"/></svg>
+      </div>
+      <h3>Abstract received</h3>
+      <p id="success-msg">Thanks — the MIND 2027 committee will be in touch with next steps for your submission.</p>
+      <button class="modal-success-btn" id="modal-done">Done</button>
+    </div>
+  </div>
+</div>
+
+<main>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <div class="hero-bg-wrap">
+    <div class="hero-bg-plate" id="hero-parallax">
+      <img
+        src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=1920&q=80&auto=format&fit=crop"
+        alt="Research library with glowing books and digital screens representing knowledge and AI"
+        width="1920" height="1280" fetchpriority="high" loading="eager"
+      />
+      <div class="hero-overlay"></div>
+    </div>
+  </div>
+
+  <header>
+    <nav class="header-nav" aria-label="Site nav">
+      <a href="#themes">Sub-Themes</a>
+      <a href="#speakers">Speakers</a>
+      <a href="#registration">Register</a>
+    </nav>
+    <div class="header-brand">
+      <div class="brand-mark">M</div>
+      MIND 2027
+    </div>
+    <div class="header-right">
+      <button class="btn-visit-sm" id="header-book-btn" style="display:none"></button>
+      <button class="burger" id="burger-btn" aria-label="Open menu">
+        <div class="burger-lines"><span></span><span></span></div>
+      </button>
+    </div>
+  </header>
+
+  <div class="hero-title-block">
+    <div class="hero-wordmark" id="hero-wordmark" aria-label="MIND 2027">
+      <span class="wm-main">MIND</span><span class="wm-year">2027</span>
+    </div>
+    <h1 id="hero-title" aria-label="Where Human Minds Meet Machine Intelligence">
+      <span class="word-clip"><span class="word-inner" id="hw0">Where</span></span>&#32;<span class="word-clip"><span class="word-inner" id="hw1">Human</span></span>&#32;<span class="word-clip"><span class="word-inner" id="hw2">Minds</span></span><br/><span class="word-clip"><span class="word-inner" id="hw3">Meet</span></span>&#32;<span class="word-clip"><span class="word-inner" id="hw4">Machine</span></span>
+    </h1>
+  </div>
+
+  <div class="hero-bottom">
+    <div>
+      <div class="hero-date-badge" id="hero-date-badge">
+        <span class="badge-dot"></span>
+        09–10 April 2027 &nbsp;·&nbsp; Hindustan Institute of Technology and Science, Chennai
+      </div>
+      <p class="hero-tagline" style="margin-top:1.25rem" aria-label="Machine. Intelligence. Narratives. Digital humanities.">
+        <span class="line-clip"><span class="line-inner" id="hl0"><span class="acro">M</span>achine</span></span>
+        <span class="line-clip"><span class="line-inner" id="hl1"><span class="acro">I</span>ntelligence</span></span>
+        <span class="line-clip"><span class="line-inner" id="hl2"><span class="acro">N</span>arratives</span></span>
+        <span class="line-clip"><span class="line-inner" id="hl3"><span class="acro">D</span>igital humanities</span></span>
+      </p>
+    </div>
+
+    <div class="hero-info-cluster" id="hero-info-cluster">
+      <div class="hero-card">
+        <div class="hero-card-icon">🎓</div>
+        <div class="hero-card-info">
+          <div class="hero-card-label">Department</div>
+          <div class="hero-card-value">Department of Languages<br/>Hindustan Institute of Technology and Science</div>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-icon">📚</div>
+        <div class="hero-card-info">
+          <div class="hero-card-label">Publication</div>
+          <div class="hero-card-value">Peer-reviewed proceedings &amp; book chapters</div>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-icon">🌐</div>
+        <div class="hero-card-info">
+          <div class="hero-card-label">Mode</div>
+          <div class="hero-card-value">Hybrid — Online &amp; Offline participation</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── THEMES SECTION ── -->
+<section id="themes">
+  <div class="section-eyebrow">Sub-themes &amp; thrust areas</div>
+  <h2 class="section-h2">
+    <span class="line-clip"><span class="line-inner" id="th0">Six pathways</span></span>
+    <span class="line-clip"><span class="line-inner" id="th1">for inquiry</span></span>
+  </h2>
+
+  <div class="themes-grid">
+
+    <article class="theme-card" data-delay="0">
+      <div class="theme-icon">🤖</div>
+      <div class="theme-title">Machine Intelligence, Authorship &amp; Literary Production</div>
+      <ul class="theme-list">
+        <li>Rethinking authorship in the age of AI</li>
+        <li>AI-generated literature &amp; literary experimentation</li>
+        <li>Human–machine co-authorship</li>
+        <li>Algorithmic creativity &amp; literary value</li>
+        <li>Copyright &amp; intellectual property of AI texts</li>
+      </ul>
+    </article>
+
+    <article class="theme-card" data-delay="80">
+      <div class="theme-icon">📖</div>
+      <div class="theme-title">Narratives, Storytelling &amp; Emerging Literary Forms</div>
+      <ul class="theme-list">
+        <li>Narrative theory in the age of AI</li>
+        <li>Interactive narratives &amp; hypertext storytelling</li>
+        <li>Non-linear &amp; computational storyworlds</li>
+        <li>Machine-generated narratives &amp; meaning</li>
+        <li>AI imaginaries in science fiction</li>
+      </ul>
+    </article>
+
+    <article class="theme-card" data-delay="160">
+      <div class="theme-icon">💻</div>
+      <div class="theme-title">Digital Humanities &amp; Computational Literary Studies</div>
+      <ul class="theme-list">
+        <li>ML &amp; the transformation of humanities research</li>
+        <li>Computational literary criticism</li>
+        <li>Digital archives &amp; cultural memory</li>
+        <li>Data visualisation &amp; network analysis</li>
+        <li>NLP &amp; literary interpretation</li>
+      </ul>
+    </article>
+
+    <article class="theme-card" data-delay="240">
+      <div class="theme-icon">🧬</div>
+      <div class="theme-title">Posthumanism, Machine Cognition &amp; Human–Machine Relations</div>
+      <ul class="theme-list">
+        <li>Posthumanist theories &amp; literary studies</li>
+        <li>Machine cognition &amp; distributed agency</li>
+        <li>Cyborg identities &amp; posthuman subjectivities</li>
+        <li>Ecological posthumanism</li>
+        <li>AI, power &amp; human identity</li>
+      </ul>
+    </article>
+
+    <article class="theme-card" data-delay="320">
+      <div class="theme-icon">🎓</div>
+      <div class="theme-title">Posthuman Learning &amp; the Future of English Studies</div>
+      <ul class="theme-list">
+        <li>AI-assisted English language teaching</li>
+        <li>Generative AI in ESL/EFL classrooms</li>
+        <li>Intelligent tutoring &amp; virtual learning agents</li>
+        <li>Adaptive &amp; personalised pedagogy</li>
+        <li>Teacher identities in AI-mediated classrooms</li>
+      </ul>
+    </article>
+
+    <article class="theme-card" data-delay="400">
+      <div class="theme-icon">🌍</div>
+      <div class="theme-title">Literature, Culture, Media &amp; Digital Narratives</div>
+      <ul class="theme-list">
+        <li>Cultural representations of AI in literature</li>
+        <li>Science fiction &amp; machine imaginaries</li>
+        <li>Digital cultures &amp; virtual identities</li>
+        <li>Surveillance &amp; algorithmic power</li>
+        <li>Indigenous knowledge &amp; digital preservation</li>
+      </ul>
+    </article>
+
+  </div>
+</section>
+
+<!-- ── SPEAKERS ── -->
+<section id="speakers">
+  <div class="section-eyebrow">Resource persons</div>
+  <h2 class="section-h2">
+    <span class="line-clip"><span class="line-inner" id="sp0">Distinguished</span></span>
+    <span class="line-clip"><span class="line-inner" id="sp1">voices</span></span>
+  </h2>
+
+  <!-- INTERNATIONAL -->
+  <div class="voices-group">
+    <h3 class="voices-group-title">
+      International Speakers
+      <span class="voices-count">02</span>
+    </h3>
+
+    <div class="speakers-grid">
+
+      <article class="speaker-card" data-delay="0">
+        <div class="speaker-img-wrap" data-initials="MK">
+          <img src="assets/speakers/maya-khemlani-david.jpg" alt="Professor Maya Khemlani David" loading="lazy" width="300" height="400" onerror="this.classList.add('is-missing')"/>
+          <span class="speaker-mode-badge">Online</span>
+        </div>
+        <div class="speaker-info">
+          <div class="speaker-role">International Speaker</div>
+          <div class="speaker-name">Prof. Dr. Maya Khemlani David</div>
+          <div class="speaker-institution">Honorary Professor · Asia-Europe Institute, Universiti Malaya, Malaysia</div>
+          <div class="speaker-bio">Honorary Professor at the Asia-Europe Institute, Universiti Malaya. Research focuses on sociolinguistics, diaspora communities, minority languages and intercultural communication. Over 200 journal articles and book chapters; recipient of the Linguapax Award 2007.</div>
+        </div>
+      </article>
+
+      <article class="speaker-card" data-delay="140">
+        <div class="speaker-img-wrap" data-initials="JB">
+          <img src="assets/speakers/joff-bradley.jpg" alt="Professor Joff P. N. Bradley" loading="lazy" width="300" height="400" onerror="this.classList.add('is-missing')"/>
+          <span class="speaker-mode-badge">Offline</span>
+        </div>
+        <div class="speaker-info">
+          <div class="speaker-role">International Speaker</div>
+          <div class="speaker-name">Prof. Joff P. N. Bradley</div>
+          <div class="speaker-institution">Professor of English &amp; Philosophy · Teikyo University, Tokyo, Japan</div>
+          <div class="speaker-bio">Work explores continental philosophy, Deleuze and Guattari, postmedia aesthetics, philosophy of technology and ecological thought. 16 books and over 100 peer-reviewed articles; ranked among Stanford's top 2% of scientists in 2023 and 2024.</div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+
+  <!-- NATIONAL -->
+  <div class="voices-group">
+    <h3 class="voices-group-title">
+      National Speakers
+      <span class="voices-count">04</span>
+    </h3>
+
+    <div class="speakers-grid">
+
+      <article class="speaker-card" data-delay="0">
+        <div class="speaker-img-wrap" data-initials="AP">
+          <img src="assets/speakers/avishek-parui.jpg" alt="Professor Avishek Parui" loading="lazy" width="300" height="400" onerror="this.classList.add('is-missing')"/>
+          <span class="speaker-mode-badge national">National</span>
+        </div>
+        <div class="speaker-info">
+          <div class="speaker-role">National Speaker</div>
+          <div class="speaker-name">Prof. Avishek Parui</div>
+          <div class="speaker-institution">Professor of English · IIT Madras</div>
+          <div class="speaker-bio">Research spans posthumanism, digital humanities, critical theory, medical humanities, affect studies and contemporary literature. Author and editor of several influential books, published extensively in leading international journals.</div>
+        </div>
+      </article>
+
+      <article class="speaker-card" data-delay="140">
+        <div class="speaker-img-wrap" data-initials="SV">
+          <img src="assets/speakers/sathyaraj-venkatesan.jpg" alt="Professor Sathyaraj Venkatesan" loading="lazy" width="300" height="400" onerror="this.classList.add('is-missing')"/>
+          <span class="speaker-mode-badge national">National</span>
+        </div>
+        <div class="speaker-info">
+          <div class="speaker-role">National Speaker</div>
+          <div class="speaker-name">Prof. Sathyaraj Venkatesan</div>
+          <div class="speaker-institution">Professor of English · Dept. of Humanities &amp; Social Sciences, NIT Tiruchirappalli</div>
+          <div class="speaker-bio">Internationally recognised scholar in Health Humanities, Comics Studies and Graphic Medicine. Books with Routledge, Springer and Bloomsbury; widely published in Medical Humanities and the Journal of Graphic Novels and Comics.</div>
+        </div>
+      </article>
+
+      <article class="speaker-card" data-delay="280">
+        <div class="speaker-img-wrap" data-initials="SS">
+          <img src="assets/speakers/srimathy.jpg" alt="Dr. T. Shrimathy Venkatalakshmi" loading="lazy" width="300" height="400" onerror="this.classList.add('is-missing')"/>
+          <span class="speaker-mode-badge national">National</span>
+        </div>
+        <div class="speaker-info">
+          <div class="speaker-role">National Speaker</div>
+          <div class="speaker-name">Dr. T. Shrimathy Venkatalakshmi</div>
+          <div class="speaker-institution">Professor and Head, Department of English · Anna University</div>
+          <div class="speaker-bio">Interests include English language teaching, applied linguistics, communication studies, literary criticism and technology-mediated learning. Has presented and published research in national and international forums, and contributes to curriculum development and teacher education.</div>
+        </div>
+      </article>
+
+      <article class="speaker-card" data-delay="420">
+        <div class="speaker-img-wrap" data-initials="KJ">
+          <img src="assets/speakers/kshema-jose.jpg" alt="Dr. Kshema Jose" loading="lazy" width="300" height="400" onerror="this.classList.add('is-missing')"/>
+          <span class="speaker-mode-badge national">National</span>
+        </div>
+        <div class="speaker-info">
+          <div class="speaker-role">National Speaker</div>
+          <div class="speaker-name">Dr. Kshema Jose</div>
+          <div class="speaker-institution">English and Foreign Languages University (EFLU)</div>
+          <div class="speaker-bio">Has made significant contributions to English Language Teaching and technology-enhanced language education — online language learning, blended learning, flipped classrooms, AI in the ESL classroom and Web 2.0 tools in teaching.</div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+
+  <div class="sponsor-band">
+    <div class="sponsor-text">Hosted by</div>
+    <div class="sponsor-logos">
+      <span class="sponsor-logo-item">Hindustan Institute of Technology and Science</span>
+      <span class="sponsor-logo-item">Dept. of Languages</span>
+      <span class="sponsor-logo-item">NAAC A+</span>
+      <span class="sponsor-logo-item">NIRF Ranked</span>
+      <span class="sponsor-logo-item">IET Member</span>
+      <span class="sponsor-logo-item">NBA Accredited</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── STATS ── -->
+<section id="stats">
+  <div class="section-eyebrow light">By the numbers</div>
+  <h2 class="section-h2 light" style="margin-top:1rem">
+    <span class="line-clip"><span class="line-inner" id="st0">A conference</span></span>
+    <span class="line-clip"><span class="line-inner" id="st1">that counts</span></span>
+  </h2>
+
+  <dl class="stats-grid">
+    <div class="stat-cell" data-delay="0">
+      <dt style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Thrust Areas</dt>
+      <dd><div class="stat-val">6</div><div class="stat-label">Thrust areas &amp; sub-themes</div></dd>
+    </div>
+    <div class="stat-cell" data-delay="110">
+      <dt style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Days</dt>
+      <dd><div class="stat-val">2</div><div class="stat-label">Days of intensive discourse</div></dd>
+    </div>
+    <div class="stat-cell" data-delay="220">
+      <dt style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Keynote Speakers</dt>
+      <dd><div class="stat-val">6</div><div class="stat-label">International &amp; national keynote speakers</div></dd>
+    </div>
+    <div class="stat-cell" data-delay="330">
+      <dt style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Years</dt>
+      <dd><div class="stat-val">40</div><div class="stat-label">Years of Hindustan Institute of Technology and Science legacy</div></dd>
+    </div>
+  </dl>
+</section>
+
+<!-- ── ORGANISING TEAM (image accordion) ── -->
+<section id="team">
+  <div class="section-eyebrow">The people behind MIND 2027</div>
+  <h2 class="section-h2">
+    <span class="line-clip"><span class="line-inner" id="tm0">Organising</span></span>
+    <span class="line-clip"><span class="line-inner" id="tm1">team</span></span>
+  </h2>
+
+  <div class="team-label">
+    <span class="team-label-rule" aria-hidden="true"></span>
+    <span class="team-label-pill">Core Team</span>
+    <span class="team-label-rule" aria-hidden="true"></span>
+  </div>
+
+  <div class="acc-wrap" role="list">
+    <article class="acc-item" role="listitem" tabindex="0" data-delay="0" aria-label="Dr. A. L. Vallikannu">
+      <img src="assets/speakers/core-1-vallikannu.jpg" alt="Dr. A. L. Vallikannu" loading="lazy" width="600" height="800"/>
+      <div class="acc-caption">
+        <div class="acc-name">Dr. A. L. Vallikannu</div>
+        <div class="acc-role">Associate Dean (Sponsored Research)<br/>Directorate of Research and Consultancy</div>
+      </div>
+    </article>
+    <article class="acc-item" role="listitem" tabindex="0" data-delay="110" aria-label="Dr. S. Marceline Pushpa">
+      <img src="assets/speakers/core-2-marceline.jpg" alt="Dr. S. Marceline Pushpa" loading="lazy" width="600" height="800"/>
+      <div class="acc-caption">
+        <div class="acc-name">Dr. S. Marceline Pushpa</div>
+        <div class="acc-role">Head<br/>SLiCA</div>
+      </div>
+    </article>
+    <article class="acc-item" role="listitem" tabindex="0" data-delay="220" aria-label="Dr. Sonu Joseph">
+      <img src="assets/speakers/core-3-sonu.jpg" alt="Dr. Sonu Joseph" loading="lazy" width="600" height="800"/>
+      <div class="acc-caption">
+        <div class="acc-name">Dr. Sonu Joseph</div>
+        <div class="acc-role">Associate Professor &amp; Head, Dept. of Languages<br/>Convenor</div>
+      </div>
+    </article>
+    <article class="acc-item" role="listitem" tabindex="0" data-delay="330" aria-label="Dr. S. Saradha Devi">
+      <img src="assets/speakers/core-4-saradha.jpg" alt="Dr. S. Saradha Devi" loading="lazy" width="600" height="800"/>
+      <div class="acc-caption">
+        <div class="acc-name">Dr. S. Saradha Devi</div>
+        <div class="acc-role">Assistant Professor<br/>Coordinator</div>
+      </div>
+    </article>
+  </div>
+
+  <div class="team-label editorial-label">
+    <span class="team-label-rule" aria-hidden="true"></span>
+    <span class="team-label-pill">Editorial Team</span>
+    <span class="team-label-rule" aria-hidden="true"></span>
+  </div>
+
+  <div class="editorial-grid">
+    <article class="editorial-card">
+      <figure class="editorial-photo"><img src="assets/editorial/editorial-1-vidya.jpg" alt="Dr. Vidya Sarveswaran" loading="lazy" width="529" height="686" style="object-position:center 12%"/></figure>
+      <div class="editorial-body">
+        <h3 class="editorial-name">Dr. Vidya Sarveswaran</h3>
+        <p class="editorial-role">Associate Professor of English<br/>School of Liberal Arts, IIT Jodhpur</p>
+      </div>
+    </article>
+    <article class="editorial-card">
+      <figure class="editorial-photo"><img src="assets/editorial/editorial-2-shrimathy.jpg" alt="Dr. T. Shrimathy Venkatalakshmi" loading="lazy" width="512" height="610" style="object-position:center 8%"/></figure>
+      <div class="editorial-body">
+        <h3 class="editorial-name">Dr. T. Shrimathy Venkatalakshmi</h3>
+        <p class="editorial-role">Professor &amp; Head<br/>Department of English, Anna University, Chennai</p>
+      </div>
+    </article>
+    <article class="editorial-card">
+      <figure class="editorial-photo"><img src="assets/editorial/editorial-3-rajasekaran.jpg" alt="Dr. V. Rajasekaran" loading="lazy" width="583" height="720" style="object-position:center 10%"/></figure>
+      <div class="editorial-body">
+        <h3 class="editorial-name">Dr. V. Rajasekaran</h3>
+        <p class="editorial-role">Associate Professor<br/>School of Social Sciences and Languages, VIT Chennai</p>
+      </div>
+    </article>
+    <article class="editorial-card">
+      <figure class="editorial-photo"><img src="assets/editorial/editorial-4-martha.jpg" alt="Dr. Martha Karunakar" loading="lazy" width="250" height="250" style="object-position:center 20%"/></figure>
+      <div class="editorial-body">
+        <h3 class="editorial-name">Dr. Martha Karunakar</h3>
+        <p class="editorial-role">Associate Professor &amp; Head<br/>Department of English, SSN College of Engineering, Chennai</p>
+      </div>
+    </article>
+    <article class="editorial-card">
+      <figure class="editorial-photo"><img src="assets/editorial/editorial-5-madhumitha.jpg" alt="Dr. Madumitha Pasupathi" loading="lazy" width="977" height="1000" style="object-position:center 14%"/></figure>
+      <div class="editorial-body">
+        <h3 class="editorial-name">Dr. Madumitha Pasupathi</h3>
+        <p class="editorial-role">Associate Professor<br/>Rajiv Gandhi National Institute of Youth Development (RGNIYD), Sriperumbudur</p>
+      </div>
+    </article>
+    <article class="editorial-card">
+      <figure class="editorial-photo"><img src="assets/editorial/editorial-6-jiby.jpg" alt="Dr. Fr. Jiby Jose E, CMI" loading="lazy" width="667" height="1000" style="object-position:center 26%"/></figure>
+      <div class="editorial-body">
+        <h3 class="editorial-name">Dr. Fr. Jiby Jose E, CMI</h3>
+        <p class="editorial-role">Principal<br/>CHRIST PU &amp; Junior College – Residential, Bengaluru</p>
+      </div>
+    </article>
+  </div>
+
+</section>
+
+<!-- ── OUTCOMES ── -->
+<section id="outcomes">
+  <div class="section-eyebrow">What the conference aims to achieve</div>
+  <h2 class="section-h2">
+    <span class="line-clip"><span class="line-inner" id="oc0">Expected</span></span>
+    <span class="line-clip"><span class="line-inner" id="oc1">outcomes</span></span>
+  </h2>
+
+  <ul class="outcomes-grid">
+    <li class="outcome-card" data-delay="0">
+      <div>
+        <div class="outcome-quote-mark">"</div>
+        <blockquote class="outcome-text">Explore evolving intersections between AI and the humanities, reimagining what it means to read, write, and interpret in an age of machine intelligence.</blockquote>
+      </div>
+      <figcaption class="outcome-footer">
+        <div class="outcome-name">Intersectionality</div>
+        <div class="outcome-role">AI × Humanities Research</div>
+      </figcaption>
+    </li>
+    <li class="outcome-card" data-delay="120">
+      <div>
+        <div class="outcome-quote-mark">"</div>
+        <blockquote class="outcome-text">Foster interdisciplinary partnerships between scholars of humanities and science, building scholarly networks that address the future of language, literature, and learning.</blockquote>
+      </div>
+      <figcaption class="outcome-footer">
+        <div class="outcome-name">Collaboration</div>
+        <div class="outcome-role">Cross-disciplinary Networks</div>
+      </figcaption>
+    </li>
+    <li class="outcome-card" data-delay="240">
+      <div>
+        <div class="outcome-quote-mark">"</div>
+        <blockquote class="outcome-text">Boost critical deliberations on ethics, agency, creativity, and machine cognition — retaining humanistic values while embracing technological innovation.</blockquote>
+      </div>
+      <figcaption class="outcome-footer">
+        <div class="outcome-name">Ethics &amp; Agency</div>
+        <div class="outcome-role">Critical Conversations</div>
+      </figcaption>
+    </li>
+  </ul>
+</section>
+
+<!-- ── KEY DATES ── -->
+<section id="dates">
+  <div class="section-eyebrow">Key dates</div>
+  <h2 class="section-h2">
+    <span class="line-clip"><span class="line-inner" id="kd0">Mark the</span></span>
+    <span class="line-clip"><span class="line-inner" id="kd1">calendar</span></span>
+  </h2>
+
+  <ol class="dates-list">
+    <li class="date-row" data-delay="0">
+      <span class="date-label">Abstract submission opens</span>
+      <span class="date-value">4 December 2026</span>
+    </li>
+    <li class="date-row" data-delay="80">
+      <span class="date-label">Abstract submission closes</span>
+      <span class="date-value">1 January 2027</span>
+    </li>
+    <li class="date-row" data-delay="160">
+      <span class="date-label">Full paper submission</span>
+      <span class="date-value">14 January 2027</span>
+    </li>
+    <li class="date-row" data-delay="240">
+      <span class="date-label">First phase of acceptance</span>
+      <span class="date-value tba">To be announced</span>
+    </li>
+    <li class="date-row" data-delay="320">
+      <span class="date-label">Second phase of acceptance</span>
+      <span class="date-value tba">To be announced</span>
+    </li>
+    <li class="date-row" data-delay="400">
+      <span class="date-label">Registration &amp; camera-ready submission deadline</span>
+      <span class="date-value tba">To be announced</span>
+    </li>
+    <li class="date-row highlight" data-delay="440">
+      <span class="date-label">Date of conference</span>
+      <span class="date-value">9–10 April 2027</span>
+    </li>
+  </ol>
+</section>
+
+<!-- ── PAPER SUBMISSION GUIDELINES ── -->
+<section id="guidelines">
+  <div class="section-eyebrow">For authors</div>
+  <h2 class="section-h2">
+    <span class="line-clip"><span class="line-inner" id="ps0">Paper submission</span></span>
+    <span class="line-clip"><span class="line-inner" id="ps1">guidelines</span></span>
+  </h2>
+  <p class="guide-lede">Manuscript Preparation, Submission Requirements &amp; Publication Ethics</p>
+  <p class="guide-intro">Authors intending to submit their research papers to the conference are requested to carefully review and comply with the following guidelines. Adherence to these requirements will facilitate a smooth review process and ensure consistency in the presentation and quality of submitted manuscripts.</p>
+
+  <ol class="guide-list">
+    <li class="guide-item">
+      <span class="guide-num" aria-hidden="true">01</span>
+      <div class="guide-body">
+        <h3>Accepted Submission Formats</h3>
+        <p>All manuscripts must be submitted in Microsoft Word (.doc/.docx) or PDF format, strictly following the prescribed conference template. Submissions that do not conform to the specified format may be returned to the authors for necessary corrections or rejected during the initial screening process.</p>
+      </div>
+    </li>
+    <li class="guide-item">
+      <span class="guide-num" aria-hidden="true">02</span>
+      <div class="guide-body">
+        <h3>Manuscript Language and Quality</h3>
+        <p>Papers must be written in clear, precise and grammatically appropriate English. Authors may adopt either American or British English conventions; however, a consistent style of spelling, punctuation and usage must be maintained throughout the manuscript. Manuscripts should be thoroughly proofread before submission to ensure readability and academic clarity.</p>
+      </div>
+    </li>
+    <li class="guide-item">
+      <span class="guide-num" aria-hidden="true">03</span>
+      <div class="guide-body">
+        <h3>Originality of Research</h3>
+        <p>Submitted manuscripts must present original research, innovative methodologies, significant findings or meaningful contributions to the relevant field of study. Papers containing previously published material without proper acknowledgement, substantial duplication or uncredited content will not be considered for publication.</p>
+      </div>
+    </li>
+    <li class="guide-item">
+      <span class="guide-num" aria-hidden="true">04</span>
+      <div class="guide-body">
+        <h3>Exclusive Submission Policy</h3>
+        <p>A manuscript submitted to the conference must not be under simultaneous consideration by another conference, journal or publication platform. Submissions that are already published or currently undergoing review elsewhere will not be eligible for consideration.</p>
+      </div>
+    </li>
+    <li class="guide-item">
+      <span class="guide-num" aria-hidden="true">05</span>
+      <div class="guide-body">
+        <h3>Compliance with Conference Template</h3>
+        <p>Authors must strictly adhere to the official formatting template provided by the conference. Particular attention should be given to:</p>
+        <ul>
+          <li>Paper title, author details and institutional affiliations.</li>
+          <li>Abstract and appropriate keywords.</li>
+          <li>Section headings and subsection numbering.</li>
+          <li>Font type, size, spacing and page layout.</li>
+          <li>Figures, tables, equations and illustrations.</li>
+          <li>In-text citations and reference formatting.</li>
+        </ul>
+        <p>Manuscripts that substantially deviate from the prescribed template may be sent back for revision even before the review process.</p>
+      </div>
+    </li>
+    <li class="guide-item">
+      <span class="guide-num" aria-hidden="true">06</span>
+      <div class="guide-body">
+        <h3>Abstract and Keyword Requirements</h3>
+        <p>Each submission must include a concise and informative abstract highlighting the research problem, objectives, methodology, significant findings and principal contributions. Relevant keywords should be provided immediately after the abstract to facilitate indexing and identification of the paper's subject area.</p>
+      </div>
+    </li>
+    <li class="guide-item">
+      <span class="guide-num" aria-hidden="true">07</span>
+      <div class="guide-body">
+        <h3>Authorship and Contributor Eligibility</h3>
+        <p>A maximum of three authors may be listed on a single manuscript. Every individual identified as an author must have made a substantial academic or research contribution to the work. In cases where the number of authors exceeds the prescribed limit, a detailed justification explaining the individual contributions of all authors must accompany the submission.</p>
+      </div>
+    </li>
+    <li class="guide-item">
+      <span class="guide-num" aria-hidden="true">08</span>
+      <div class="guide-body">
+        <h3>Author Information and Affiliation</h3>
+        <p>The names of all authors, their institutional affiliations and other required professional details must be provided accurately. The sequence of authors should be mutually agreed upon before submission. Any subsequent changes to the authorship order or author details will require appropriate justification and approval.</p>
+      </div>
+    </li>
+    <li class="guide-item">
+      <span class="guide-num" aria-hidden="true">09</span>
+      <div class="guide-body">
+        <h3>Double-Blind Peer Review</h3>
+        <p>All submitted manuscripts will undergo a rigorous double-blind peer-review process, wherein the identities of the authors and reviewers will remain confidential. Authors must ensure that identifying information is excluded from the review copy wherever required by the conference template. Manuscripts will be evaluated based on originality, technical significance, methodological soundness, relevance, clarity and overall research contribution.</p>
+      </div>
+    </li>
+    <li class="guide-item">
+      <span class="guide-num" aria-hidden="true">10</span>
+      <div class="guide-body">
+        <h3>Plagiarism and Similarity Standards</h3>
+        <p>All submissions must adhere to accepted standards of academic integrity. Manuscripts will be subjected to plagiarism and similarity checks. Authors are responsible for ensuring that all borrowed ideas, text, data, images and other materials are appropriately acknowledged and cited. Any instance of plagiarism, data manipulation, fabrication or other forms of academic misconduct may result in immediate rejection.</p>
+      </div>
+    </li>
+    <li class="guide-item">
+      <span class="guide-num" aria-hidden="true">11</span>
+      <div class="guide-body">
+        <h3>Figures, Tables and Illustrations</h3>
+        <p>All figures, charts, diagrams and tables must be relevant to the research and clearly presented. Each visual element should carry an appropriate title or caption and be numbered sequentially. Authors must ensure that images are of sufficient resolution and that all reproduced or adapted materials have the necessary permissions and acknowledgements.</p>
+      </div>
+    </li>
+    <li class="guide-item">
+      <span class="guide-num" aria-hidden="true">12</span>
+      <div class="guide-body">
+        <h3>References and Citation Standards</h3>
+        <p>All sources referred to in the manuscript must be appropriately cited and included in the reference list. Authors are expected to follow the referencing style prescribed in the conference template consistently. References should be accurate, complete and relevant to the research undertaken. Uncited references and incomplete bibliographic details should be avoided.</p>
+      </div>
+    </li>
+    <li class="guide-item">
+      <span class="guide-num" aria-hidden="true">13</span>
+      <div class="guide-body">
+        <h3>Research Ethics and Data Integrity</h3>
+        <p>Authors must ensure that their research complies with applicable ethical guidelines and institutional regulations. Any research involving human participants, sensitive information or experimental data must satisfy the relevant ethical requirements. Research findings, experimental observations and supporting data must be presented accurately without fabrication, falsification or misleading interpretation.</p>
+      </div>
+    </li>
+    <li class="guide-item">
+      <span class="guide-num" aria-hidden="true">14</span>
+      <div class="guide-body">
+        <h3>Corresponding Author Responsibilities</h3>
+        <p>The designated corresponding author will serve as the primary point of communication with the conference organisers throughout the submission, review and publication processes. The corresponding author must:</p>
+        <ul>
+          <li>Ensure that all co-authors have reviewed and approved the final manuscript.</li>
+          <li>Obtain consent from every listed author for submission and publication.</li>
+          <li>Verify the accuracy of author names, affiliations and contact information.</li>
+          <li>Coordinate responses to reviewers' comments and editorial suggestions.</li>
+          <li>Communicate all necessary revisions and clarifications within the stipulated deadlines.</li>
+          <li>Ensure that all authors are informed of the manuscript's submission and review status.</li>
+        </ul>
+      </div>
+    </li>
+    <li class="guide-item">
+      <span class="guide-num" aria-hidden="true">15</span>
+      <div class="guide-body">
+        <h3>Review Outcomes and Manuscript Revisions</h3>
+        <p>Following evaluation, manuscripts may be accepted, accepted subject to minor or major revisions, or rejected. Authors receiving revision requests must address the reviewers' observations systematically and submit the revised manuscript within the specified timeframe. A point-by-point response explaining the modifications made should accompany the revised submission.</p>
+      </div>
+    </li>
+    <li class="guide-item">
+      <span class="guide-num" aria-hidden="true">16</span>
+      <div class="guide-body">
+        <h3>Final Manuscript Submission</h3>
+        <p>Authors of accepted papers must submit the final revised version in the prescribed format within the announced deadline. The final manuscript should incorporate all required corrections and comply with the conference's publication specifications. Late submissions or manuscripts that fail to address mandatory reviewer recommendations may not be considered for inclusion in the conference proceedings.</p>
+      </div>
+    </li>
+    <li class="guide-item">
+      <span class="guide-num" aria-hidden="true">17</span>
+      <div class="guide-body">
+        <h3>Copyright and Publication Permission</h3>
+        <p>Authors must ensure that they possess the necessary rights and permissions for all content included in their manuscripts. Where applicable, the prescribed copyright transfer or publication consent documents must be completed and submitted. Authors remain responsible for resolving copyright-related issues arising from the use of third-party material.</p>
+      </div>
+    </li>
+    <li class="guide-item">
+      <span class="guide-num" aria-hidden="true">18</span>
+      <div class="guide-body">
+        <h3>Conference Registration and Presentation</h3>
+        <p>At least one author of an accepted paper must complete the required conference registration within the stipulated period. Accepted papers must be presented by an authorised author during the designated technical session. Failure to complete registration or present the paper, as required by the conference policy, may affect its inclusion in the published proceedings.</p>
+      </div>
+    </li>
+    <li class="guide-item">
+      <span class="guide-num" aria-hidden="true">19</span>
+      <div class="guide-body">
+        <h3>Withdrawal and Post-Submission Modifications</h3>
+        <p>Authors wishing to withdraw a submitted manuscript must communicate their decision formally to the conference organising committee. Requests for changes to the title, authorship, affiliation or manuscript content after submission will be considered only with appropriate justification and approval from the conference authorities.</p>
+      </div>
+    </li>
+    <li class="guide-item">
+      <span class="guide-num" aria-hidden="true">20</span>
+      <div class="guide-body">
+        <h3>Conference Committee's Decision</h3>
+        <p>The decision of the Technical Programme Committee and the designated reviewers regarding acceptance, revision or rejection of submitted manuscripts will be final. The organising committee reserves the right to decline submissions that fail to meet the conference's academic, ethical or formatting requirements.</p>
+      </div>
+    </li>
+    <li class="guide-item guide-note">
+      <div class="guide-body">
+        <h3>Important note to authors</h3>
+        <p>Submission of a manuscript implies that all listed authors have read, understood and agreed to the conference submission policies. Authors are strongly encouraged to verify their manuscripts against the prescribed checklist before uploading the final document. Compliance with these guidelines is essential for consideration in the conference review and publication process.</p>
+      </div>
+    </li>
+  </ol>
+
+  <h2 class="section-h2 guide-h2">
+    <span class="line-clip"><span class="line-inner" id="pe0">Publication ethics &amp;</span></span>
+    <span class="line-clip"><span class="line-inner" id="pe1">editorial guidelines</span></span>
+  </h2>
+  <p class="guide-intro">The International Conference AUTHOR 2.0 AND BEYOND: ARTIFICIAL INTELLIGENCE, MACHINE COGNITION, POSTHUMAN LEARNING AND THE FUTURE OF ENGLISH STUDIES, organised by Hindustan Institute of Technology and Science, Chennai, in collaboration with Taylor &amp; Francis, is committed to maintaining the highest standards of academic integrity, originality and ethical scholarly publishing.<br/><br/>All authors, editors, reviewers and members of the organising committee are expected to adhere to the following ethical guidelines.</p>
+
+  <ol class="guide-list">
+    <li class="guide-item">
+      <span class="guide-num" aria-hidden="true">01</span>
+      <div class="guide-body">
+        <h3>Publication Policy and Editorial Selection</h3>
+        <p>Submission or presentation of a paper at the conference does not guarantee its publication in the conference proceedings. All manuscripts will undergo an appropriate peer-review and editorial selection process. Publication will be based on academic quality, originality, relevance, research contribution and compliance with the applicable Taylor &amp; Francis publication requirements. The final selection of papers will be subject to editorial approval and the publisher's requirements.</p>
+      </div>
+    </li>
+    <li class="guide-item">
+      <span class="guide-num" aria-hidden="true">02</span>
+      <div class="guide-body">
+        <h3>Authors' Responsibilities</h3>
+        <p>Authors must ensure that:</p>
+        <ul>
+          <li>Submitted manuscripts are original, unpublished and not under consideration elsewhere.</li>
+          <li>All sources, references, quotations and third-party materials are appropriately acknowledged.</li>
+          <li>Research findings are presented accurately, without fabrication, falsification or plagiarism.</li>
+          <li>All listed authors have made significant scholarly contributions and approved the final manuscript.</li>
+          <li>Necessary ethical approvals and informed consent are obtained for research involving human or animal participants, wherever applicable.</li>
+          <li>Conflicts of interest and sources of research funding are appropriately disclosed.</li>
+          <li>Generative AI tools, where used, are employed responsibly and disclosed in accordance with applicable publisher guidelines. AI tools cannot be listed as authors, and authors remain fully responsible for the submitted content.</li>
+          <li>Any significant errors identified after submission or publication are promptly reported to the editorial committee.</li>
+        </ul>
+      </div>
+    </li>
+    <li class="guide-item">
+      <span class="guide-num" aria-hidden="true">03</span>
+      <div class="guide-body">
+        <h3>Editors' and Guest Editors' Responsibilities</h3>
+        <p>The editorial committee and guest editors are responsible for maintaining the academic quality and integrity of the proceedings. They must ensure fair, unbiased and confidential manuscript evaluation, coordinate the peer-review process, manage revisions and recommend suitable papers for publication. Editorial decisions must be based solely on academic merit, originality, relevance and ethical compliance. Any potential conflicts of interest must be disclosed and appropriately managed.</p>
+      </div>
+    </li>
+    <li class="guide-item">
+      <span class="guide-num" aria-hidden="true">04</span>
+      <div class="guide-body">
+        <h3>Reviewers' Responsibilities</h3>
+        <p>Reviewers must:</p>
+        <ul>
+          <li>Evaluate manuscripts objectively and provide constructive academic feedback.</li>
+          <li>Assess originality, research methodology, relevance and scholarly contribution.</li>
+          <li>Maintain strict confidentiality of submitted manuscripts.</li>
+          <li>Disclose conflicts of interest and decline reviews where impartiality or expertise may be compromised.</li>
+          <li>Report suspected plagiarism, copyright infringement or research misconduct to the editorial committee.</li>
+          <li>Complete reviews within the stipulated timeframe.</li>
+        </ul>
+      </div>
+    </li>
+    <li class="guide-item">
+      <span class="guide-num" aria-hidden="true">05</span>
+      <div class="guide-body">
+        <h3>Publisher's Responsibilities</h3>
+        <p>Taylor &amp; Francis, as the publishing partner, provides the applicable publication framework and editorial requirements. All manuscripts recommended for publication must comply with the publisher's policies concerning publication ethics, copyright, peer review and scholarly publishing standards. Final publication decisions remain subject to the publisher's applicable requirements and editorial approval.</p>
+      </div>
+    </li>
+    <li class="guide-item">
+      <span class="guide-num" aria-hidden="true">06</span>
+      <div class="guide-body">
+        <h3>Copyright and Permissions</h3>
+        <p>Authors are responsible for ensuring that their manuscripts do not infringe upon third-party copyright or intellectual property rights. Necessary permissions and acknowledgements must be obtained for the use of images, tables, figures and other copyrighted materials. Authors must comply with the publisher's copyright and licensing requirements.</p>
+      </div>
+    </li>
+    <li class="guide-item">
+      <span class="guide-num" aria-hidden="true">07</span>
+      <div class="guide-body">
+        <h3>Ethical Compliance and Misconduct</h3>
+        <p>Plagiarism, duplicate publication, simultaneous submission, data fabrication, falsification and other forms of academic misconduct are unacceptable. The conference editorial committee reserves the right to reject or withdraw manuscripts found to violate ethical or publication requirements. Appropriate corrective action will be taken in accordance with the applicable editorial and publisher policies.</p>
+      </div>
+    </li>
+    <li class="guide-item">
+      <span class="guide-num" aria-hidden="true">08</span>
+      <div class="guide-body">
+        <h3>Final Publication Disclaimer</h3>
+        <p>Acceptance or presentation of a paper at the conference does not constitute a commitment or guarantee of publication. Only manuscripts that successfully complete the peer-review and editorial selection process and satisfy the applicable Taylor &amp; Francis publication requirements will be considered for inclusion in the conference proceedings.</p>
+      </div>
+    </li>
+  </ol>
+</section>
+
+<!-- ── REGISTRATION ── -->
+<section id="registration">
+  <div class="section-eyebrow">Registration fee</div>
+  <h2 class="section-h2">
+    <span class="line-clip"><span class="line-inner" id="rg0">Join the</span></span>
+    <span class="line-clip"><span class="line-inner" id="rg1">conversation</span></span>
+  </h2>
+
+  <div class="reg-grid">
+
+    <div class="reg-card featured" data-delay="0">
+      <div class="reg-type">External Participants</div>
+      <ul class="reg-list">
+        <li><span>Academicians</span><span class="reg-amt">₹4,500 <i>INR</i></span></li>
+        <li><span>Industry person</span><span class="reg-amt">₹5,000 <i>INR</i></span></li>
+        <li><span>Students / Research Scholars</span><span class="reg-amt">₹4,000 <i>INR</i></span></li>
+      </ul>
+      <button class="reg-btn" onclick="openModal()">Register Now</button>
+    </div>
+
+    <div class="reg-card" data-delay="120">
+      <div class="reg-type">International Participants</div>
+      <div class="reg-price">$100 <span>USD</span></div>
+      <div class="reg-who">Students, research scholars &amp; academicians from overseas institutions</div>
+      <button class="reg-btn" onclick="openModal()">Register Now</button>
+    </div>
+
+    <div class="reg-card" data-delay="240">
+      <div class="reg-type">Publication</div>
+      <p class="reg-note">Papers selected after rigorous scrutiny will be published in an open-access, Scopus-indexed publication in collaboration with Taylor &amp; Francis.</p>
+      <p class="reg-note muted">An additional publication fee will be levied post discussion with the publishing house — separately for the author and the co-author.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer id="contact">
+  <div class="footer-cta-band">
+    <div>
+      <div class="section-eyebrow light">Get involved</div>
+      <div class="footer-cta-title">
+        <span class="line-clip"><span class="line-inner" id="fc0">Submit.</span></span>
+        <span class="line-clip"><span class="line-inner" id="fc1">Present.</span></span>
+        <span class="line-clip"><span class="line-inner" id="fc2">Publish.</span></span>
+      </div>
+    </div>
+    <button class="pill-btn light inview-ready" id="footer-book-btn">
+      Submit Abstract
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </button>
+  </div>
+
+  <div class="footer-cols">
+    <div class="footer-brand-col">
+      <div class="footer-brand-name">
+        <div class="brand-mark">M</div>
+        MIND 2027
+      </div>
+      <p class="footer-blurb">Machine Intelligence, Narratives and Digital Humanities — an International Conference on Posthuman Learning and the Future of English Studies. Hosted by Hindustan Institute of Technology and Science (Deemed to be University).</p>
+      <address class="footer-address">
+        <a href="mailto:mind2027@hindustanuniv.ac.in">mind2027@hindustanuniv.ac.in</a><br/>
+        <a href="tel:+914427474262">+91-44-2747 4262</a><br/>
+        <span class="muted">1, Rajiv Gandhi Salai (OMR), Padur, Kelambakkam, Chennai – 603 103, Tamil Nadu, India</span>
+      </address>
+    </div>
+
+    <nav class="footer-nav-col" aria-label="Themes">
+      <div class="footer-nav-heading">Themes</div>
+      <ul class="footer-nav-list">
+        <li><a href="#themes">Machine Intelligence</a></li>
+        <li><a href="#themes">Narratives &amp; Storytelling</a></li>
+        <li><a href="#themes">Digital Humanities</a></li>
+        <li><a href="#themes">Posthumanism</a></li>
+      </ul>
+    </nav>
+
+    <nav class="footer-nav-col" aria-label="Conference">
+      <div class="footer-nav-heading">Conference</div>
+      <ul class="footer-nav-list">
+        <li><a href="#speakers">Keynote Speakers</a></li>
+        <li><a href="#registration">Registration</a></li>
+        <li><a href="#stats">About</a></li>
+        <li><a href="#outcomes">Outcomes</a></li>
+      </ul>
+    </nav>
+
+    <nav class="footer-nav-col" aria-label="Institution">
+      <div class="footer-nav-heading">Institution</div>
+      <ul class="footer-nav-list">
+        <li><a href="https://www.hindustanuniv.ac.in" target="_blank" rel="noopener">Hindustan Institute of Technology and Science</a></li>
+        <li><a href="#contact">Dept. of Languages</a></li>
+        <li><a href="#contact">Campus</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="footer-bottom">
+    <span>© 2027 MIND 2027 · Hindustan Institute of Technology and Science. All rights reserved.</span>
+    <div class="footer-social">
+      <a href="#">Academia.edu</a>
+      <a href="#">ResearchGate</a>
+      <a href="#">LinkedIn</a>
+    </div>
+    <div class="footer-legal">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <span class="alby-mark" title="You found the Easter egg — built by ALBY">alby</span>
+    </div>
+  </div>
+</footer>
+
+</main>
+
+<script type="module">
+import Lenis from 'lenis';
+
+/* ══════════════════════════════════════════════
+   SMOOTH SCROLL — one owner of scroll state
+   ══════════════════════════════════════════════ */
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+
+const lenis = new Lenis({
+  autoRaf: false,
+  lerp: reduceMotion ? 1 : 0.09,
+  smoothWheel: !reduceMotion,
+  syncTouch: false,
+  wheelMultiplier: 1,
+  touchMultiplier: 1.5
+});
+
+/* drive the engine ourselves so it works on every lenis build */
+function raf(time){
+  lenis.raf(time);
+  requestAnimationFrame(raf);
+}
+requestAnimationFrame(raf);
+
+/* stop at the top while the loader is on screen */
+lenis.scrollTo(0, { immediate: true });
+lenis.stop();
+
+/* ══════════════════════════════════════════════
+   MENU
+   ══════════════════════════════════════════════ */
+const menuEl = document.getElementById('menu');
+function openMenu(){ menuEl.classList.add('open'); lenis.stop(); }
+function closeMenu(){ menuEl.classList.remove('open'); if (!modalEl.classList.contains('open')) lenis.start(); }
+
+document.getElementById('burger-btn').addEventListener('click', openMenu);
+document.getElementById('menu-close').addEventListener('click', closeMenu);
+document.getElementById('menu-backdrop').addEventListener('click', closeMenu);
+document.querySelectorAll('.menu-link').forEach(link => link.addEventListener('click', closeMenu));
+document.getElementById('menu-book-btn').addEventListener('click', () => {
+  closeMenu();
+  setTimeout(openModal, 320);
+});
+
+/* ══════════════════════════════════════════════
+   MODAL
+   ══════════════════════════════════════════════ */
+const modalEl      = document.getElementById('modal');
+const modalForm    = document.getElementById('modal-form');
+const modalSuccess = document.getElementById('modal-success');
+const modalSubmit  = document.getElementById('modal-submit');
+
+function openModal(){
+  modalEl.classList.add('open');
+  lenis.stop();
+  setTimeout(() => document.getElementById('field-name')?.focus(), 120);
+}
+function closeModal(){
+  modalEl.classList.remove('open');
+  if (!menuEl.classList.contains('open')) lenis.start();
+  setTimeout(() => {
+    if (modalForm) modalForm.reset();
+    if (modalSuccess) modalSuccess.classList.remove('show');
+    if (modalForm) modalForm.style.display = '';
+    if (modalSubmit){ modalSubmit.textContent = 'Submit Abstract'; modalSubmit.disabled = false; }
+  }, 350);
+}
+window.openModal = openModal;
+
+document.getElementById('header-book-btn').addEventListener('click', openModal);
+document.getElementById('footer-book-btn').addEventListener('click', openModal);
+document.getElementById('modal-close').addEventListener('click', closeModal);
+document.getElementById('modal-backdrop').addEventListener('click', closeModal);
+document.getElementById('modal-done').addEventListener('click', closeModal);
+
+modalForm.addEventListener('submit', e => {
+  e.preventDefault();
+  modalSubmit.textContent = 'Sending…';
+  modalSubmit.disabled = true;
+  setTimeout(() => {
+    const name = document.getElementById('field-name').value.trim().split(' ')[0] || 'there';
+    const msg = document.getElementById('success-msg');
+    if (msg) msg.textContent = `Thanks, ${name} — the MIND 2027 committee will be in touch with next steps for your submission.`;
+    modalForm.style.display = 'none';
+    modalSuccess.classList.add('show');
+  }, 1200);
+});
+
+/* ══════════════════════════════════════════════
+   IN-PAGE ANCHORS — routed through Lenis
+   (this is what made the old build feel broken:
+    native jumps fought the smooth-scroll engine)
+   ══════════════════════════════════════════════ */
+document.addEventListener('click', e => {
+  const link = e.target.closest('a[href^="#"]');
+  if (!link) return;
+  const hash = link.getAttribute('href');
+  if (!hash || hash === '#') return;
+  const target = document.querySelector(hash);
+  if (!target) return;
+  e.preventDefault();
+  if (menuEl.classList.contains('open')) closeMenu();
+  lenis.scrollTo(target, { offset: 0, duration: 1.1 });
+});
+
+/* ══════════════════════════════════════════════
+   FONT SCALE ABOVE 1920
+   ══════════════════════════════════════════════ */
+const FONT_BASE = 16, BASE_W = 1920, COEF = 0.6666;
+function scaleFontUp(){
+  const html = document.documentElement;
+  const reduction = ((BASE_W - innerWidth) / BASE_W) * 100 * COEF;
+  const size = FONT_BASE - (FONT_BASE * reduction) / 100;
+  if (size > FONT_BASE) html.style.fontSize = size + 'px';
+  else html.style.removeProperty('font-size');
+}
+scaleFontUp();
+window.addEventListener('resize', scaleFontUp);
+
+/* ══════════════════════════════════════════════
+   LOADER
+   ══════════════════════════════════════════════ */
+const loader = document.getElementById('loader');
+const loaderBrand = loader.querySelector('.loader-brand');
+const loaderFill = document.getElementById('loader-fill');
+const MIN_MS = 1400, MAX_MS = 2600, EXIT_MS = 850;
+let ready = false;
+
+function revealHero(){
+  if (ready) return;
+  ready = true;
+  lenis.start();
+  loader.classList.add('exit');
+  setTimeout(() => loader.remove(), EXIT_MS + 100);
+
+  [0,1,2,3,4].forEach((i, idx) => {
+    setTimeout(() => document.getElementById('hw'+i)?.classList.add('revealed'), idx * 140);
+  });
+  setTimeout(() => document.getElementById('hero-date-badge')?.classList.add('revealed'), 350);
+  document.getElementById('hero-wordmark')?.classList.add('revealed');
+  [0,1,2,3].forEach(i => {
+    setTimeout(() => document.getElementById('hl'+i)?.classList.add('revealed'), 350 + i*110);
+  });
+  setTimeout(() => document.getElementById('hero-info-cluster')?.classList.add('revealed'), 780);
+
+  lenis.resize();
+}
+
+requestAnimationFrame(() => {
+  loaderBrand.classList.add('show');
+  setTimeout(() => loaderFill.classList.add('go'), 50);
+});
+
+let started = false;
+function startCountdown(){
+  if (started) return; started = true;
+  setTimeout(revealHero, MIN_MS);
+}
+if (document.readyState === 'complete') startCountdown();
+else window.addEventListener('load', startCountdown);
+setTimeout(revealHero, MAX_MS);
+
+/* ══════════════════════════════════════════════
+   SECTION HEADING REVEALS
+   ══════════════════════════════════════════════ */
+function revealLines(ids, baseDelay = 0, stagger = 120){
+  ids.forEach((id, i) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    setTimeout(() => el.classList.add('revealed'), baseDelay + i*stagger);
+  });
+}
+
+[
+  { ids: ['th0','th1'], section: '#themes' },
+  { ids: ['sp0','sp1'], section: '#speakers' },
+  { ids: ['st0','st1'], section: '#stats' },
+  { ids: ['tm0','tm1'], section: '#team' },
+  { ids: ['oc0','oc1'], section: '#outcomes' },
+  { ids: ['kd0','kd1'], section: '#dates' },
+  { ids: ['ps0','ps1'], section: '#guidelines .section-h2:not(.guide-h2)' },
+  { ids: ['pe0','pe1'], section: '#guidelines .guide-h2' },
+  { ids: ['rg0','rg1'], section: '#registration' },
+  { ids: ['fc0','fc1','fc2'], section: 'footer' }
+].forEach(({ ids, section }) => {
+  const el = document.querySelector(section);
+  if (!el) return;
+  const obs = new IntersectionObserver(([entry]) => {
+    if (entry.isIntersecting){ revealLines(ids, 0, 120); obs.disconnect(); }
+  }, { threshold: 0.15 });
+  obs.observe(el);
+});
+
+/* ══════════════════════════════════════════════
+   GENERIC INVIEW HELPER
+   ══════════════════════════════════════════════ */
+function makeInviewObserver(selector, threshold = 0.15, delay = 0){
+  document.querySelectorAll(selector).forEach(el => {
+    const obs = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      setTimeout(() => el.classList.add('inview'), delay);
+      obs.disconnect();
+    }, { threshold });
+    obs.observe(el);
+  });
+}
+
+/* staggered card groups */
+function staggerCards(selector){
+  document.querySelectorAll(selector).forEach(card => {
+    const delay = parseInt(card.dataset.delay || 0, 10);
+    const obs = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      setTimeout(() => {
+        card.classList.add('inview');
+        setTimeout(() => card.classList.add('active'), 20);
+      }, delay);
+      obs.disconnect();
+    }, { threshold: 0.1 });
+    obs.observe(card);
+  });
+}
+staggerCards('.theme-card');
+staggerCards('.speaker-card');
+staggerCards('.stat-cell');
+staggerCards('.acc-item');
+staggerCards('.outcome-card');
+staggerCards('.reg-card');
+
+document.querySelectorAll('.inview-ready').forEach(el => {
+  const obs = new IntersectionObserver(([entry]) => {
+    if (entry.isIntersecting){ el.classList.add('visible'); obs.disconnect(); }
+  }, { threshold: 0.15 });
+  obs.observe(el);
+});
+
+/* ══════════════════════════════════════════════
+   HERO PARALLAX — driven by Lenis, never by
+   the native scroll event (double-update jitter)
+   ══════════════════════════════════════════════ */
+const heroBg  = document.getElementById('hero-parallax');
+const heroSec = document.getElementById('hero');
+
+function updateParallax(){
+  if (!heroSec || !heroBg) return;
+  const rect = heroSec.getBoundingClientRect();
+  const progress = Math.min(1, Math.max(0, -rect.top / rect.height));
+  heroBg.style.transform = `translate3d(0, ${progress * 10}%, 0)`;
+}
+lenis.on('scroll', updateParallax);
+window.addEventListener('resize', () => { lenis.resize(); updateParallax(); });
+updateParallax();
+
+/* ══════════════════════════════════════════════
+   ESC CLOSES
+   ══════════════════════════════════════════════ */
+window.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  if (overlayOpen(menuEl)) closeMenu();
+  if (overlayOpen(modalEl)) closeModal();
+});
+function overlayOpen(el){ return el && el.classList.contains('open'); }
+</script>
+</body>
+</html>
